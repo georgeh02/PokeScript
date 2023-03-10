@@ -1,4 +1,4 @@
-![Alt text](../docs/logo.png?raw=true "Title")
+![logo](logo.png)
 
 # PokeScript
 
