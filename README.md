@@ -1,2 +1,2 @@
-# language
-A compiler for the language
+# PokeScript
+A compiler for the language PokeScript
