@@ -1,4 +1,4 @@
-![logo](logo.png)
+![logo](docs/logo.png)
 
 # PokeScript
 
