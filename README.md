@@ -25,6 +25,6 @@ Created by George Harrison
 
 ## Examples
 
-| Javascript                       | PokeScript               |
-| -------------------------------- | ------------------------ |
-| '''console.log("Hello World")''' | '''pika "Hello World"''' |
+| Javascript                   | PokeScript           |
+| ---------------------------- | -------------------- |
+| `console.log("Hello World")` | `pika "Hello World"` |
