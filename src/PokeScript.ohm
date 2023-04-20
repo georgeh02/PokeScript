@@ -21,13 +21,13 @@ PokeScript {
   Params      	 = "(" ListOf<Param, ","> ")"
   Param        	 = Type id
 
-  Assign   		 = Exp5 "=" Exp                  				 --regular
+  Assign   		 = Exp5 "=" Exp                  		
 
   Return      	 = return Exp 									 --exp
               	 | return          								 --short     
   
   LoopStmt    	 = while Exp Block 				     		  	 --while
-              	 | for (Type|let) id "in" id Block           	 --ForEach
+              	 | for (Type|let) id "in" Exp Block           	 --ForEach
               	 | for (let|"int") id "=" Exp "until" Exp Block  --For
   IfStmt      	 = if Exp Block else Block                       --long
               	 | if Exp Block else IfStmt                      --elsif
@@ -67,14 +67,13 @@ PokeScript {
 
 
   Type 	  = "[" Type "]"				         --array
-  		  | "{" Type "," Type "}" 		         --dictionary
+  		  | "{" Type "," Type "}" 		         --map
           | "(" ListOf<Type, ","> ")" "->" Type  --function
   		  | id							         --id
 
   intlit       	 = digit+
   floatlit     	 = digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
 
-  /*strlit    	 = ("\"" | "\'") char* ("~" applySyntactic<Exp> "~" char*)* ("\"" | "\'")*/
   strlit      	 = "\"" char* "\""
   char        	 = ~"\\" ~"\"" ~"\n" ~"~" any
   
@@ -85,7 +84,7 @@ PokeScript {
 
   Member         = this "." id
 
-  Call       	 = id "(" ListOf<Exp, ","> ")"  --regular
+  Call       	 = id "(" ListOf<Exp, ","> ")"
 
   let         = "poke" ~idchar
   const		  = "const" ~idchar
@@ -106,7 +105,6 @@ PokeScript {
   
   keyword     = let | const | print | function | else | if | while 
               | for | break | return | true | false | this | new                
-  num         = digit+
   id          = ~keyword letter idchar*
   idchar      = letter | digit | "_"
               
