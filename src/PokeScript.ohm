@@ -10,9 +10,7 @@ PokeScript {
                | Return
                | break          
                | Call
-               | ClassDec
                | Member
-               | DotCall
 
   PrintStmt      = print Exp
 
@@ -41,8 +39,8 @@ PokeScript {
   
   Exp     = Exp0 "?" Exp0 ":" Exp                           --ternary
           | Exp0
-  Exp0    = Exp1 ("||" Exp1)+                               --binary
-          | Exp1 ("&&" Exp1)+                               --binary
+  Exp0    = Exp1 ("||" Exp1)+                               --or
+          | Exp1 ("&&" Exp1)+                               --and
           | Exp1
   Exp1    = Exp2 ("<="|"<"|"=="|"!="|">="|">") Exp2         --binary
           | Exp2
@@ -61,7 +59,6 @@ PokeScript {
           | Call    
           | Exp5 "[" Exp "]"			--subscript
           | Member
-          | DotCall
           | strlit  
           | id
           | ArrayLit
@@ -87,7 +84,6 @@ PokeScript {
   MapEntry       = Exp5 ":" Exp
 
   Member         = this "." id
-  DotCall  		 = id "." Call 
 
   Call       	 = id "(" ListOf<Exp, ","> ")"  --regular
 

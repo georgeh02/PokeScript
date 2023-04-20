@@ -22,7 +22,7 @@ export default function analyze(match) {
     Return() {},
     Call() {},
     ClassDec() {},
-    DotExpression() {},
+    MemberExpression() {},
     DotCall() {},
     Exp1_Binary() {},
   })
