@@ -8,7 +8,7 @@ Created by George Harrison
 
 ## Types
 
-| Javascript | Pokescript             |
+| Javascript | PokeScript             |
 | ---------- | ---------------------- |
 | boolean    | capture (success/fail) |
 | String     | pokestring             |
@@ -18,13 +18,13 @@ Created by George Harrison
 
 ## Data Structures
 
-| Javascript | Pokescript |
+| Javascript | PokeScript |
 | ---------- | ---------- |
 | Array      | pokelist   |
 | Dictionary | pokedex    |
 
 ## Examples
 
-| Javascript                       | Pokescript               |
+| Javascript                       | PokeScript               |
 | -------------------------------- | ------------------------ |
 | '''console.log("Hello World")''' | '''pika "Hello World"''' |
