@@ -14,7 +14,6 @@ Created by George Harrison
 | String     | pokestring             |
 | Number     | pokedollar (int)       |
 | Number     | pokefloat (float)      |
-| object     | pokemon                |
 
 ## Data Structures
 
