@@ -60,7 +60,7 @@ PokeScript {
           | Exp5 "[" Exp "]"			--subscript
           | Member
           | strlit  
-          | id
+          | id                          --id
           | ArrayLit
           | MapLit
           | "(" Exp ")"                 --parens
