@@ -10,6 +10,11 @@ const semanticChecks = [
     "all predefined identifiers",
     "pika ln(sqrt(sin(cos(hypot(π,1) + exp(5.5E2)))))",
   ],
+  ["comparisons", "pika(3<5)"],
+  ["additions", "pika 7 - 2 + 5"],
+  ["exponentiations", "pika(7 ** 3 ** 2.5 ** 5)"],
+  ["negations", "pika (7 * (-3))"],
+  ["declared variables", "poke x = 3 pika(x*5)"],
 ]
 
 const semanticErrors = [
@@ -32,6 +37,13 @@ const semanticErrors = [
     "pika(sin(5, 10))",
     /1 argument\(s\) required but 2 passed/,
   ],
+  ["bad types in comparison", "pika(3<dog)"],
+  ["bad types in addition", "pika(false + 1)"],
+  ["bad types in multiplication", `pika("x" * 5)`],
+  ["non-boolean while test", "evolve 3 {}"],
+  ["undeclared in print", "pika x"],
+  ["undeclared in add", "pika (x+5)"],
+  ["undeclared in negate", "pika(-z)"],
 ]
 
 const sample =

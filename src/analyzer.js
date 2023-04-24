@@ -6,6 +6,40 @@
 
 import * as core from "./core.js"
 
+function must(condition, errorMessage) {
+  if (!condition) {
+    throw new Error(errorMessage)
+  }
+}
+
+function MustBeANumber(e) {
+  must(e.type === core.Type.FLOAT, "Float or Int expected")
+}
+
+function MustBeABoolean(e) {
+  must(e.type === core.Type.BOOLEAN, "Boolean expected")
+}
+
+function MustHaveSameType(e1, e2) {
+  must(e1.type === e2.type, "Same type expected")
+}
+
+function MustBeDeclared(e, id) {
+  must(!!e, `${id.sourceString} not declared`)
+}
+
+class Context {
+  constructor() {
+    this.locals = new Map()
+  }
+  add(name, entity) {
+    this.locals.set(name, entity)
+  }
+  lookup(name) {
+    return this.locals.get(name)
+  }
+}
+
 export default function analyze(match) {
   const analyzer = match.matcher.grammar.createSemantics().addOperation("rep", {
     Program(statements) {
@@ -16,7 +50,8 @@ export default function analyze(match) {
     },
     VarDecl(type, id, _eq, exp) {
       const initializer = exp.rep()
-      const variable = new core.Variable(id.sourceString)
+      const variable = new core.Variable(id.sourceString, initializer.type)
+      Context.add(variable.name, variable)
       return new core.VariableDeclaration(variable, initializer)
     },
     FunDecl(_fun, id, params, _arrow, types, block) {
@@ -47,6 +82,7 @@ export default function analyze(match) {
     },
     LoopStmt_while(_while, exp, block) {
       const test = exp.rep()
+      MustBeABoolean(test)
       const body = block.rep()
       return new core.WhileStatement(test, body)
     },
@@ -64,27 +100,35 @@ export default function analyze(match) {
     Exp0_and(exp, _ops, exps) {},
     Exp1_binary(exp1, relop, exp2) {
       const left = exp1.rep()
+      MustBeANumber(left)
       const operator = relop.sourceString
       const right = exp2.rep()
-      return new core.BinaryExpression(left, operator, right)
+      MustBeANumber(right)
+      return new core.BinaryExpression(left, operator, right, core.Type.BOOLEAN)
     },
     Exp2_binary(exp1, addOp, exp2) {
       const exp = exp1.rep()
+      MustBeANumber(exp)
       const operator = addOp.sourceString
       const term = exp2.rep()
-      return new core.BinaryExpression(exp, operator, term)
+      MustBeANumber(term)
+      return new core.BinaryExpression(exp, operator, term, exp.type)
     },
     Exp3_binary(exp1, mulOp, exp2) {
       const exp = exp1.rep()
+      MustBeANumber(exp)
       const operator = mulOp.sourceString
       const term = exp2.rep()
-      return new core.BinaryExpression(exp, operator, term)
+      MustHaveSameType(exp, term)
+      return new core.BinaryExpression(exp, operator, term, exp.type)
     },
     Exp4_binary(exp1, powerOp, exp2) {
       const exp = exp1.rep()
+      MustBeANumber(exp1)
       const operator = powerOp.sourceString
       const term = exp2.rep()
-      return new core.BinaryExpression(exp, operator, term)
+      MustHaveSameType(exp1, exp2)
+      return new core.BinaryExpression(exp, operator, term, exp1.type)
     },
     Exp4_unary(unaryOp, exp) {},
     Exp5_subscript(exp1, _open, exp2, _close) {
@@ -92,9 +136,13 @@ export default function analyze(match) {
     },
     Exp5_id(id) {
       //TODO: check that it hasn't been previously declared
-      return id.sourceString
+      const entity = Context.lookup(id.sourceString)
+      MustBeDeclared(entity, id)
+      return entity
     },
-    Exp5_parens(_open, exp, _close) {},
+    Exp5_parens(_open, exp, _close) {
+      return exp.rep()
+    },
     Type_array(_left, type, _right) {
       return new core.ArrayType(type.rep())
     },
