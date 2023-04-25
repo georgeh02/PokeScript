@@ -12,22 +12,6 @@ function must(condition, errorMessage) {
   }
 }
 
-function MustBeANumber(e) {
-  must(e.type === core.Type.FLOAT, "Float or Int expected")
-}
-
-function MustBeABoolean(e) {
-  must(e.type === core.Type.BOOLEAN, "Boolean expected")
-}
-
-function MustHaveSameType(e1, e2) {
-  must(e1.type === e2.type, "Same type expected")
-}
-
-function MustBeDeclared(e, id) {
-  must(!!e, `${id.sourceString} not declared`)
-}
-
 class Context {
   constructor() {
     this.locals = new Map()
@@ -41,6 +25,28 @@ class Context {
 }
 
 export default function analyze(match) {
+  let context = new Context()
+
+  function MustBeANumber(e) {
+    //   must(e.type === core.Type.INT, "Float or Int expected")
+    must(
+      [core.Type.INT, core.Type.FLOAT].includes(e.type),
+      "Float or Int expected"
+    )
+  }
+
+  function MustBeABoolean(e) {
+    must(e.type === core.Type.BOOLEAN, "Boolean expected")
+  }
+
+  function MustHaveSameType(e1, e2) {
+    must(e1.type === e2.type, "Same type expected")
+  }
+
+  function MustBeDeclared(e, id) {
+    must(!!e, `${id.sourceString} not declared`)
+  }
+
   const analyzer = match.matcher.grammar.createSemantics().addOperation("rep", {
     Program(statements) {
       return new core.Program(statements.children.map((s) => s.rep()))
@@ -48,10 +54,15 @@ export default function analyze(match) {
     PrintStmt(_print, exp) {
       return new core.PrintStatement(exp.rep())
     },
-    VarDecl(type, id, _eq, exp) {
+    VarDecl(modifier, id, _eq, exp) {
       const initializer = exp.rep()
-      const variable = new core.Variable(id.sourceString, initializer.type)
-      Context.add(variable.name, variable)
+      const readOnly = modifier.sourceString === "const"
+      const variable = new core.Variable(
+        id.sourceString,
+        readOnly,
+        initializer.type
+      )
+      context.add(id.sourceString, variable)
       return new core.VariableDeclaration(variable, initializer)
     },
     FunDecl(_fun, id, params, _arrow, types, block) {
@@ -136,7 +147,7 @@ export default function analyze(match) {
     },
     Exp5_id(id) {
       //TODO: check that it hasn't been previously declared
-      const entity = Context.lookup(id.sourceString)
+      const entity = context.lookup(id.sourceString)
       MustBeDeclared(entity, id)
       return entity
     },

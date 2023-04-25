@@ -18,8 +18,8 @@ const semanticChecks = [
 ]
 
 const semanticErrors = [
-  ["using undeclared identifiers", "pika x", /Identifier x not declared/],
-  ["a variable used as function", "x = 1 x(2)", /Expected "="/],
+  ["using undeclared identifiers", "pika x", /x not declared/],
+  ["a variable used as function", "poke x = 1 x(2)", /Expected "="/],
   [
     "a function used as variable",
     "pika(sin + 1)",
