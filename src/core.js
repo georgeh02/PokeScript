@@ -81,6 +81,38 @@ export class FunctionType extends Type {
   }
 }
 
+export class ClassType extends Type {
+  constructor(name, constructor, methods) {
+    super(name)
+    this.constructor = constructor
+    this.methods = methods
+  }
+}
+
+export class ClassDeclaration {
+  constructor(id, constructorDec, methods) {
+    Object.assign(this, { id, constructorDec, methods })
+  }
+}
+
+export class ConstructorDeclaration {
+  constructor(params, body) {
+    Object.assign(this, { params, body })
+  }
+}
+
+// export class ObjectDec {
+//   constructor(identifier, args) {
+//     Object.assign(this, { identifier, args })
+//   }
+// }
+
+export class MethodDeclaration {
+  constructor(name, params, body, returnType) {
+    Object.assign(this, { name, params, body, returnType })
+  }
+}
+
 export class Assignment {
   constructor(target, source) {
     Object.assign(this, { target, source })

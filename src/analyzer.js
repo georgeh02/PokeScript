@@ -105,7 +105,16 @@ export default function analyze(match) {
     Block(_open, statements, _close) {
       return statements.children.map((s) => s.rep())
     },
+    ClassDecl(_class, id, _left, constructor, methods, _right) {
+      return new core.ClassDeclaration(id, constructor, methods)
+    },
+    ConstructorDecl(_construct, _left, params, _right, _open, body, _close) {
+      return new core.ConstructorDeclaration(params, body)
+    },
     Field(type, _this, _dot, id, _eq, exp) {},
+    MethodDecl(_function, id, _open, params, _close, _arrow, type, block) {
+      return new core.MethodDeclaration(id, params, block, type)
+    },
     Exp_ternary(exp, _questionMark, exp1, colon, exp2) {},
     Exp0_or(exp, _ops, exps) {},
     Exp0_and(exp, _ops, exps) {},
