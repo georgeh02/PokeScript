@@ -89,7 +89,7 @@ PokeScript {
   MapLit         = "{" ListOf<MapEntry, ","> "}"
   MapEntry       = Exp5 ":" Exp
 
-  Member         = this "." id
+  Member         = Exp5 "." id
 
   Call       	 = id "(" ListOf<Exp, ","> ")"
 
