@@ -6,6 +6,8 @@ A compiler for the language PokeScript
 
 Created by George Harrison
 
+This language was created to help Pokemon trainers learn how to code their very own pokedex.
+
 ## Types
 
 | Javascript | PokeScript             |

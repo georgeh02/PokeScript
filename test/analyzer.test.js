@@ -5,7 +5,7 @@ import * as core from "../src/core.js"
 
 const semanticChecks = [
   ["variables can be printed", "poke x = 1 pika x"],
-  ["variables can be reassigned", "poke x = 1 x = x * 5 / ((-3) + x)"],
+  ["variables can be reassigned", "poke x = 1 x = (x * 5 / ((-3) + x))"],
   // [
   //   "all predefined identifiers",
   //   "pika ln(sqrt(sin(cos(hypot(π,1) + exp(5.5E2)))))",

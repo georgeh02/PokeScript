@@ -28,6 +28,7 @@ export default function analyze(match) {
   let context = new Context()
 
   function MustBeANumber(e) {
+    console.log(e.type)
     //   must(e.type === core.Type.INT, "Float or Int expected")
     must(
       [core.Type.INT, core.Type.FLOAT].includes(e.type),
@@ -190,6 +191,12 @@ export default function analyze(match) {
       return new core.BinaryExpression(exp, operator, term, exp1.type)
     },
     Exp4_unary(unaryOp, exp) {
+      if (unaryOp.sourceString === "-") {
+        MustBeANumber(exp)
+      }
+      if (unaryOp.sourceString === "!") {
+        MustBeABoolean(exp)
+      }
       return new core.UnaryExpression(unaryOp.sourceString, exp.rep())
     },
     Exp5_subscript(exp1, _open, exp2, _close) {
