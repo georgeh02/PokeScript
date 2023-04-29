@@ -8,7 +8,7 @@ PokeScript {
                | LoopStmt
                | IfStmt
                | Return
-               | break          
+               | break
                | Call
                | ClassDecl
                | Member
@@ -19,82 +19,82 @@ PokeScript {
 
   FunDecl        = function id Params ("->" Type)? Block
   
-  Params      	 = "(" ListOf<Param, ","> ")"
-  Param        	 = Type id
+  Params         = "(" ListOf<Param, ","> ")"
+  Param          = Type id
 
-  Assign   		 = Exp5 "=" Exp                  		
+  Assign         = Exp5 "=" Exp
 
-  Return      	 = return Exp 									 --exp
-              	 | return          								 --short     
-  
-  LoopStmt    	 = while Exp Block 				     		  	 --while
-              	 | for (Type|let) id "in" Exp Block           	 --ForEach
-              	 | for (let|"int") id "=" Exp "until" Exp Block  --For
-  IfStmt      	 = if Exp Block else Block                       --long
-              	 | if Exp Block else IfStmt                      --elsif
-               	 | if Exp Block                                  --short
-              
-  Block        	 = "{" Statement* "}"
+  Return         = return Exp                                            --exp
+                 | return                                                --short
+
+  LoopStmt       = while Exp Block                                       --while
+                 | for (Type|let) id "in" Exp Block                      --ForEach
+                 | for (let|"int") id "=" Exp "until" Exp Block          --For
+  IfStmt         = if Exp Block else Block                               --long
+                 | if Exp Block else IfStmt                              --elsif
+                 | if Exp Block                                          --short
+
+  Block          = "{" Statement* "}"
 
   ClassDecl      = class id "{" ConstructorDecl MethodDecl* "}"
 
   ConstructorDecl = construct "(" ListOf<Param, ","> ")" "{" Field* "}"
-  
-  Field       	 =  Type this "." id "=" Exp   
-  
+
+  Field       	 =  Type this "." id "=" Exp
+
   MethodDecl     = function id "(" ListOf<Param, ","> ")" "->" Type Block
 
-  Exp     = Exp0 "?" Exp0 ":" Exp                           --ternary
+  Exp     = Exp0 "?" Exp0 ":" Exp                                        --ternary
           | Exp0
-  Exp0    = Exp1 ("||" Exp1)+                               --or
-          | Exp1 ("&&" Exp1)+                               --and
+  Exp0    = Exp1 ("||" Exp1)+                                            --or
+          | Exp1 ("&&" Exp1)+                                            --and
           | Exp1
-  Exp1    = Exp2 ("<="|"<"|"=="|"!="|">="|">") Exp2         --binary
+  Exp1    = Exp2 ("<="|"<"|"=="|"!="|">="|">") Exp2                      --binary
           | Exp2
-  Exp2    = Exp2 ("+"|"-") Exp3                             --binary
+  Exp2    = Exp2 ("+"|"-") Exp3                                          --binary
           | Exp3
-  Exp3    = Exp3 ("*"|"/"|"%") Exp3                         --binary
+  Exp3    = Exp3 ("*"|"/"|"%") Exp3                                      --binary
           | Exp4
-  Exp4    = Exp5 "**" Exp4                                  --binary
-          | ("-"|"!") Exp5                                  --unary
+  Exp4    = Exp5 "**" Exp4                                               --binary
+          | ("-"|"!") Exp5                                               --unary
           | Exp5
-  Exp5    = 
-    	  | true
+  Exp5    =
+          | true
           | false
           | floatlit
-          | intlit  
-          | Call    
-          | Exp5 "[" Exp "]"			--subscript
+          | intlit
+          | Call
+          | Exp5 "[" Exp "]"                                             --subscript
           | Member
-          | strlit  
-          | id                          --id
+          | strlit
+          | id                                                           --id
           | ArrayLit
           | MapLit
-          | "(" Exp ")"                 --parens
+          | "(" Exp ")"                                                  --parens
 
 
-  Type 	  = "[" Type "]"				         --array
-  		  | "{" Type "," Type "}" 		         --map
-          | "(" ListOf<Type, ","> ")" "->" Type  --function
-  		  | id							         --id
+  Type    = "[" Type "]"                                                 --array
+          | "{" Type "," Type "}"                                        --map
+          | "(" ListOf<Type, ","> ")" "->" Type                          --function
+          | id                                                           --id
 
-  intlit       	 = digit+
-  floatlit     	 = digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
+  intlit         = digit+
+  floatlit       = digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
 
-  strlit      	 = "\"" char* "\""
-  char        	 = ~"\\" ~"\"" ~"\n" ~"~" any
-  
+  strlit        = "\"" char* "\""
+  char          = ~"\\" ~"\"" ~"\n" ~"~" any
+
   ArrayLit       = "[" ListOf<Exp, ","> "]"
-  
+
   MapLit         = "{" ListOf<MapEntry, ","> "}"
   MapEntry       = Exp5 ":" Exp
 
   Member         = Exp5 "." id
 
-  Call       	 = id "(" ListOf<Exp, ","> ")"
+  Call           = id "(" ListOf<Exp, ","> ")"
 
   let         = "poke" ~idchar
-  const		  = "const" ~idchar
+  const       = "const" ~idchar
   print       = "pika" ~idchar
   function    = "ability" ~idchar
   if          = "catch" ~idchar
@@ -111,12 +111,12 @@ PokeScript {
   and         = "and" ~idchar
   or          = "or" ~idchar
   new         = "new" ~idchar
-  
+
   keyword     = let | const | print | function | else | if | while 
-              | for | break | return | true | false | this | construct | class | new                
+              | for | break | return | true | false | this | construct | class | new
   id          = ~keyword letter idchar*
   idchar      = letter | digit | "_"
-              
-  space      += "ϞϞ(๑⚈ ․̫ ⚈๑)∩" (~"\n" any)* ("\n" | end)                --comment
- 
-} 
+
+  space      += "ϞϞ(๑⚈ ․̫ ⚈๑)∩" (~"\n" any)* ("\n" | end)               --comment
+
+}
