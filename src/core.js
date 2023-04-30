@@ -152,7 +152,6 @@ export class WhileStatement {
 }
 
 export class ForEachStatement {
-  // Example: for ball in balls { ball.bounce();  }
   constructor(iterator, collection, body) {
     Object.assign(this, { iterator, collection, body })
   }
@@ -245,6 +244,7 @@ export const standardLibrary = Object.freeze({
   boolean: Type.BOOLEAN,
   string: Type.STRING,
   void: Type.VOID,
+  any: Type.ANY,
   π: new Variable("π", true, Type.FLOAT),
   print: new Function("print", anysToVoidType),
   sin: new Function("sin", floatToFloatType),

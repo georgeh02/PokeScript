@@ -29,7 +29,7 @@ PokeScript {
 
   LoopStmt        = while Exp Block                                              --while
                   | for (Type|let) id "in" Exp Block                             --ForEach
-                  | for (let|"int") id "=" Exp "until" Exp Block                 --For
+                  | for (let|"pokedollar") id "=" Exp "until" Exp Block          --For
   IfStmt          = if Exp Block else Block                                      --long
                   | if Exp Block else IfStmt                                     --elsif
                   | if Exp Block                                                 --short
@@ -59,18 +59,18 @@ PokeScript {
                   | ("-"|"!") Exp5                                               --unary
                   | Exp5
   Exp5            =
-                  | true
-                  | false
-                  | floatlit
-                  | intlit
+                  | true ~mut
+                  | false ~mut
+                  | floatlit ~mut
+                  | intlit ~mut
                   | Call
                   | Exp5 "[" Exp "]"                                             --subscript
                   | Member
-                  | strlit
+                  | strlit ~mut
                   | id                                                           --id
-                  | ArrayLit
-                  | MapLit
-                  | "(" Exp ")"                                                  --parens
+                  | ArrayLit ~mut
+                  | MapLit ~mut
+                  | "(" Exp ")" ~mut                                             --parens
 
 
   Type            = "[" Type "]"                                                 --array
@@ -93,18 +93,20 @@ PokeScript {
 
   Call            = id "(" ListOf<Exp, ","> ")"
 
+  mut             = ~"==" "="
+
   let             = "poke" ~idchar
   const           = "const" ~idchar
   print           = "pika" ~idchar
   function        = "ability" ~idchar
   if              = "catch" ~idchar
   else            = "release" ~idchar
-  while           = "train" ~idchar
+  while           = "while" ~idchar
   for             = "evolve" ~idchar
   return          = "return" ~idchar
   true            = "success" ~idchar
   false           = "fail" ~idchar
-  class           = "pokemon" ~idchar
+  class           = "train" ~idchar
   break           = "retreat" ~idchar
   this            = "this" ~idchar
   construct       = "starter" ~idchar

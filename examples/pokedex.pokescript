@@ -8,7 +8,7 @@ train Pokemon {
     ability getType() -> pokestring {
         return this.type
     }
-    ability run() {
+    ability run() -> pokestring {
         return "got away safely!"
     }
 }
