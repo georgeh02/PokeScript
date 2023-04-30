@@ -232,7 +232,7 @@ export default function analyze(match) {
       ]
       mustHaveNumericType(exp, { at: exp1 })
       mustHaveNumericType(term, { at: exp2 })
-      return new core.BinaryExpression(exp, operator, term, exp1.type)
+      return new core.BinaryExpression(exp, operator, term, exp.type)
     },
     Exp4_unary(unaryOp, exp) {
       if (unaryOp.sourceString === "-") {
