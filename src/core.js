@@ -183,35 +183,32 @@ export class UnaryExpression {
 }
 
 export class SubscriptExpression {
-  constructor(array, index) {
-    Object.assign(this, { array, index })
-    this.type = array.type.baseType
+  constructor(array, index, type) {
+    Object.assign(this, { array, index, type })
   }
 }
 
 export class ArrayExpression {
-  constructor(elements) {
-    this.elements = elements
-    this.type = new ArrayType(elements[0].type)
+  constructor(elements, type) {
+    Object.assign(this, { elements, type })
   }
 }
 
 export class MapExpression {
   constructor(elements) {
-    this.elements = elements
+    Object.assign(this, { elements })
   }
 }
 
 export class MapEntry {
   constructor(key, value) {
-    this.key = key
-    this.value = value
+    Object.assign(this, { key, value })
   }
 }
 
 export class EmptyArray {
   constructor(type) {
-    this.type = type
+    Object.assign(this, { type })
   }
 }
 

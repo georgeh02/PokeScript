@@ -63,7 +63,7 @@ PokeScript {
                   | false ~mut
                   | floatlit ~mut
                   | intlit ~mut
-                  | Call
+                  | Call ~mut
                   | Exp5 "[" Exp "]"                                             --subscript
                   | Member
                   | strlit ~mut
@@ -91,7 +91,7 @@ PokeScript {
 
   Member          = Exp5 "." id
 
-  Call            = id "(" ListOf<Exp, ","> ")"
+  Call            = Exp5 "(" ListOf<Exp, ","> ")"
 
   mut             = ~"==" "="
 

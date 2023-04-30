@@ -5,7 +5,7 @@ import * as core from "../src/core.js"
 
 const semanticChecks = [
   ["variables can be printed", "poke x = 1 pika x"],
-  ["variables can be reassigned", "poke x = 1 x = (x * 5 / ((-3) + x))"],
+  ["variables can be reassigned", "poke x = 1 \n x = (x * 5 / ((-3) + x))"],
   // [
   //   "all predefined identifiers",
   //   "pika ln(sqrt(sin(cos(hypot(π,1) + exp(5.5E2)))))",
@@ -15,16 +15,17 @@ const semanticChecks = [
   ["exponentiations", "pika(7 ** 3 ** 2.5 ** 5)"],
   ["negations", "pika (7 * (-3))"],
   ["declared variables", "poke x = 3 pika(x*5)"],
+  ["assign nums", "poke x = 3 x = (10 ** (7-2))"],
+  ["assign bools", "poke x = success x = fail"],
+  ["assign arrays", "poke x = [3, 1] x = [10]"],
+  ["subscripts", "poke a=[success, fail] pika a[0]"],
+  ["subscripted is a number", "poke a=[1, 2, 3] pika a[0]-5"],
+  ["subscripted is a boolean", "poke a=[fail] while a[0] {}"],
 ]
 
 const semanticErrors = [
   ["using undeclared identifiers", "pika x", /x not declared/],
   ["a variable used as function", "poke x = 1 x(2)", /Expected "="/],
-  [
-    "a function used as variable",
-    "pika(sin + 1)",
-    /Functions can not appear here/,
-  ],
   [
     "re-declared identifier",
     "poke x = 1 poke x = 2",
@@ -38,12 +39,20 @@ const semanticErrors = [
     /1 argument\(s\) required but 2 passed/,
   ],
   ["bad types in comparison", "pika(3<dog)"],
-  ["bad types in addition", "pika(false + 1)"],
+  ["bad types in addition", "pika(fail + 1)"],
   ["bad types in multiplication", `pika("x" * 5)`],
   ["non-boolean while test", "evolve 3 {}"],
   ["undeclared in print", "pika x"],
   ["undeclared in add", "pika (x+5)"],
   ["undeclared in negate", "pika(-z)"],
+  ["assigning bool to num", "poke x = 1 x = fail", /Type mismatch/],
+  ["arrays of mixed types", `poke a = [2, "dog"]`, /Mixed types in array/],
+  ["non-numeric sub", "poke a = 2 pika a[1]", /Array expected/],
+  [
+    "non-numeric subscript",
+    "poke a = [1, 2, 3] pika a[fail]",
+    /Integer expected at/,
+  ],
 ]
 
 // const sample =
