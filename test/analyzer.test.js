@@ -21,11 +21,12 @@ const semanticChecks = [
   ["subscripts", "poke a=[success, fail] pika a[0]"],
   ["subscripted is a number", "poke a=[1, 2, 3] pika a[0]-5"],
   ["subscripted is a boolean", "poke a=[fail] while a[0] {}"],
+  ["built-in sin", "pika(sin(π))"],
 ]
 
 const semanticErrors = [
   ["using undeclared identifiers", "pika x", /x not declared/],
-  ["a variable used as function", "poke x = 1 x(2)", /Expected "="/],
+  ["a variable used as function", "poke x = 1 x(2)", /Call of non-function/],
   [
     "re-declared identifier",
     "poke x = 1 poke x = 2",
@@ -45,7 +46,11 @@ const semanticErrors = [
   ["undeclared in print", "pika x"],
   ["undeclared in add", "pika (x+5)"],
   ["undeclared in negate", "pika(-z)"],
-  ["assigning bool to num", "poke x = 1 x = fail", /Type mismatch/],
+  [
+    "assigning bool to num",
+    "poke x = 1 x = fail",
+    /Cannot assign a capture to a pokedollar/,
+  ],
   ["arrays of mixed types", `poke a = [2, "dog"]`, /Mixed types in array/],
   ["non-numeric sub", "poke a = 2 pika a[1]", /Array expected/],
   [

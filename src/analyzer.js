@@ -14,19 +14,27 @@ function must(condition, message, errorLocation) {
 }
 
 class Context {
-  constructor() {
-    this.locals = new Map()
+  constructor({
+    parent = null,
+    locals = new Map(),
+    inLoop = false,
+    function: f = null,
+  }) {
+    Object.assign(this, { parent, locals, inLoop, function: f })
   }
   add(name, entity) {
     this.locals.set(name, entity)
   }
   lookup(name) {
-    return this.locals.get(name)
+    return this.locals.get(name) || this.parent?.lookup(name)
+  }
+  newChildContext(props) {
+    return new Context({ ...this, ...props, parent: this, locals: new Map() })
   }
 }
 
 export default function analyze(match) {
-  let context = new Context()
+  let context = new Context({})
 
   function mustHaveNumericType(e, at) {
     must(
@@ -66,15 +74,46 @@ export default function analyze(match) {
     must(!!e, `${id.sourceString} not declared`, at)
   }
 
-  function mustBeAssignable(source, targetType, at) {
-    must(
-      source.type === targetType ||
-        (source.type instanceof core.ArrayType &&
-          targetType instanceof core.ArrayType &&
-          source.type.baseType === targetType.baseType),
-      "Type mismatch at",
-      at
+  function mustNotAlreadyBeDeclared(name, at) {
+    must(!context.lookup(name), `Identifier ${name} already declared at`, at)
+  }
+
+  function assignable(fromType, toType) {
+    return (
+      toType == core.Type.ANY ||
+      equivalent(fromType, toType) ||
+      (fromType instanceof core.FunctionType &&
+        toType instanceof core.FunctionType &&
+        // covariant in return types
+        assignable(fromType.returnType, toType.returnType) &&
+        fromType.paramTypes.length === toType.paramTypes.length &&
+        // contravariant in parameter types
+        toType.paramTypes.every((t, i) =>
+          assignable(t, fromType.paramTypes[i])
+        ))
     )
+  }
+
+  function mustBeAssignable(e, { toType: type }, at) {
+    const message = `Cannot assign a ${e.type.description} to a ${type.description}`
+    must(assignable(e.type, type), message, at)
+  }
+
+  //   function mustBeAssignable(source, targetType, at) {
+  //     console.log(source.type, targetType)
+  //     must(
+  //       source.type === targetType ||
+  //         (source.type instanceof core.ArrayType &&
+  //           targetType instanceof core.ArrayType &&
+  //           source.type.baseType === targetType.baseType),
+  //       "Type mismatch at",
+  //       at
+  //     )
+  //   }
+
+  function mustBeCallable(e, at) {
+    const callable = e.type instanceof core.FunctionType
+    must(callable, "Call of non-function", at)
   }
 
   function mustBeAnArray(e, at) {
@@ -85,6 +124,11 @@ export default function analyze(match) {
     const firstType = elements[0].type
     const allSame = elements.slice(1).every((e) => e.type === firstType)
     must(allSame, "Mixed types in array at", at)
+  }
+
+  function mustHaveRightNumberOfArguments(argCount, paramCount, at) {
+    const message = `${paramCount} argument(s) required but ${argCount} passed`
+    must(argCount === paramCount, message, at)
   }
 
   const analyzer = match.matcher.grammar.createSemantics().addOperation("rep", {
@@ -102,6 +146,7 @@ export default function analyze(match) {
         readOnly,
         initializer.type
       )
+      mustNotAlreadyBeDeclared(id.sourceString, { at: id })
       context.add(id.sourceString, variable)
       return new core.VariableDeclaration(variable, initializer)
     },
@@ -109,11 +154,27 @@ export default function analyze(match) {
       const returnType =
         types.children.length === 0 ? core.Type.VOID : types[0].rep()
       const fun = new core.Function(id.sourceString, returnType)
+      mustNotAlreadyBeDeclared(id.sourceString, { at: id })
+      context.add(id.sourceString, fun)
+
+      context = context.newChildContext({ inLoop: false, function: fun })
+      const parameters = params.rep()
+
+      // Now that the parameters are known, we compute the function's type.
+      // This is fine; we did not need the type to analyze the parameters,
+      // but we do need to set it before analyzing the body.
+      const paramTypes = parameters.map((param) => param.type)
+      fun.type = new core.FunctionType(paramTypes, returnType)
+
+      // Analyze body while still in child context
+      const body = block.rep()
+      context = context.parent
+
       return new core.FunctionDeclaration(
         fun,
         id.sourceString,
-        params.rep(),
-        block.rep()
+        paramTypes,
+        body
       )
     },
     Params(_open, params, _close) {
@@ -125,7 +186,7 @@ export default function analyze(match) {
     Assign(exp5, _eq, exp) {
       const target = exp5.rep()
       const source = exp.rep()
-      mustBeAssignable(source, target.type, { at: exp5 })
+      mustBeAssignable(source, { toType: target.type }, { at: exp5 })
       return new core.Assignment(target, source)
     },
     Return_exp(_return, exps) {
@@ -304,29 +365,20 @@ export default function analyze(match) {
     Member(exp5, _dot, id) {
       return new core.MemberExpression(exp5.rep(), id.sourceString)
     },
-    Call(id, _open, exps, _close) {
-      //   const callee = id.rep()
-      //   mustBeCallable(callee, { at: id })
-      //   const exps = expList.asIteration().children
-      //   const targetTypes =
-      //     callee instanceof core.StructType
-      //       ? callee.fields.map((f) => f.type)
-      //       : callee.type.paramTypes
-      //   mustHaveRightNumberOfArguments(exps.length, targetTypes.length, {
-      //     at: open,
-      //   })
-      //   const args = exps.map((exp, i) => {
-      //     const arg = exp.rep()
-      //     mustBeAssignable(arg, { toType: targetTypes[i] }, { at: exp })
-      //     return arg
-      //   })
-      //   return callee instanceof core.StructType
-      //     ? new core.ConstructorCall(callee, args, callee)
-      //     : new core.FunctionCall(callee, args, callee.type.returnType)
-      return new core.Call(
-        id.rep(),
-        exps.asIteration().children.map((e) => e.rep())
-      )
+    Call(id, open, expList, _close) {
+      const callee = id.rep()
+      mustBeCallable(callee, { at: id })
+      const exps = expList.asIteration().children
+      const targetTypes = callee.type.paramTypes
+      mustHaveRightNumberOfArguments(exps.length, targetTypes.length, {
+        at: open,
+      })
+      const args = exps.map((exp, i) => {
+        const arg = exp.rep()
+        mustBeAssignable(arg, { toType: targetTypes[i] }, { at: exp })
+        return arg
+      })
+      return new core.Call(callee, args, callee.type.returnType)
     },
     true(_) {
       return true
