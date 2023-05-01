@@ -201,8 +201,6 @@ export default function analyze(match) {
       return new core.VariableDeclaration(variable, initializer)
     },
     FunDecl(_fun, id, params, _arrow, types, block) {
-      //   const returnType =
-      //     types.children.length === 0 ? core.Type.VOID : types[0].rep()
       const fun = new core.Function(id.sourceString)
       mustNotAlreadyBeDeclared(id.sourceString, { at: id })
       context.add(id.sourceString, fun)
@@ -225,11 +223,9 @@ export default function analyze(match) {
       return params.asIteration().children.map((p) => p.rep())
     },
     Param(type, id) {
-      console.log("BEFORE CONTEXT", context)
       const param = new core.Variable(id.sourceString, false, type.rep())
       mustNotAlreadyBeDeclared(param.name, { at: id })
       context.add(param.name, param)
-      console.log("AFTER CONTEXT", context)
       return param
     },
     Assign(exp5, _eq, exp) {
@@ -333,23 +329,10 @@ export default function analyze(match) {
         constructor.rep(),
         methods.rep()
       )
-
-      //   const classType = new core.ClassType(id.sourceString, constructor.rep())
-      //   context.add(id.sourceString, classType)
-      //   classType.methods = methods.children.map((method) => method.rep())
-
-      //   return new core.ClassDeclaration(
-      //     id.sourceString,
-      //     classType.constructor,
-      //     classType.methods
-      //   )
     },
     ConstructorDecl(_construct, params, _open, block, _close) {
       params = params.rep()
 
-      //console.log(context)
-      //params = params.asIteration().children
-      //console.log(params.asIteration().children.map((p) => p.rep()))
       const starter = new core.Constructor("starter", params.children.length)
       context.add("starter", starter)
       context = context.newChildContext({ inLoop: false, starter })
@@ -394,12 +377,6 @@ export default function analyze(match) {
         left = new core.BinaryExpression("||", left, right, core.Type.BOOLEAN)
       }
       return left
-      //   return new core.BinaryExpression(
-      //     "||",
-      //     exp.rep(),
-      //     exps.asIteration().children.map((e) => e.rep()),
-      //     core.Type.BOOLEAN
-      //   )
     },
     Exp0_and(exp, _ops, exps) {
       let left = exp.rep()
@@ -410,12 +387,6 @@ export default function analyze(match) {
         left = new core.BinaryExpression("&&", left, right, core.Type.BOOLEAN)
       }
       return left
-      //   return new core.BinaryExpression(
-      //     "&&",
-      //     exp.rep(),
-      //     exps.asIteration().children.map((e) => e.rep()),
-      //     core.Type.BOOLEAN
-      //   )
     },
     Exp1_binary(exp1, relop, exp2) {
       const left = exp1.rep()
