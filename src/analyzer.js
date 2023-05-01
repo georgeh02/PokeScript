@@ -332,7 +332,6 @@ export default function analyze(match) {
     },
     ConstructorDecl(_construct, params, _open, block, _close) {
       params = params.rep()
-
       const starter = new core.Constructor("starter", params.children.length)
       context.add("starter", starter)
       context = context.newChildContext({ inLoop: false, starter })
@@ -340,7 +339,7 @@ export default function analyze(match) {
       const field = block.rep()
       context = context.parent
 
-      return new core.ConstructorDeclaration(params.rep(), field)
+      return new core.ConstructorDeclaration(params, field)
     },
     Field(type, _this, _dot, id, _eq, exp) {
       return new core.Field(type.rep(), id.sourceString, exp.rep())
