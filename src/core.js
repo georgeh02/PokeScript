@@ -81,11 +81,17 @@ export class FunctionType extends Type {
   }
 }
 
-export class ClassType extends Type {
-  constructor(name, constructor, methods) {
-    super(name)
-    this.constructor = constructor
-    this.methods = methods
+// export class ClassType extends Type {
+//   constructor(name, constructor, methods) {
+//     super(name)
+//     this.constructor = constructor
+//     this.methods = methods
+//   }
+// }
+
+export class ClassType {
+  constructor(name, readOnly) {
+    Object.assign(this, { name, readOnly })
   }
 }
 
@@ -94,18 +100,23 @@ export class ClassDeclaration {
     Object.assign(this, { id, constructorDec, methods })
   }
 }
-
 export class ConstructorDeclaration {
   constructor(params, body) {
     Object.assign(this, { params, body })
   }
 }
 
-// export class ObjectDec {
-//   constructor(identifier, args) {
-//     Object.assign(this, { identifier, args })
-//   }
-// }
+export class Constructor {
+  constructor(name, paramCount) {
+    Object.assign(this, { name, paramCount })
+  }
+}
+
+export class ObjectDec {
+  constructor(id, args) {
+    Object.assign(this, { id, args })
+  }
+}
 
 export class MethodDeclaration {
   constructor(name, params, body, returnType) {
@@ -139,7 +150,7 @@ export class IfStatement {
   }
 }
 
-export class ShortItStatement {
+export class ShortIfStatement {
   constructor(test, consequent) {
     Object.assign(this, { test, consequent })
   }
@@ -195,8 +206,8 @@ export class ArrayExpression {
 }
 
 export class MapExpression {
-  constructor(elements) {
-    Object.assign(this, { elements })
+  constructor(elements, type) {
+    Object.assign(this, { elements, type })
   }
 }
 
@@ -206,11 +217,11 @@ export class MapEntry {
   }
 }
 
-export class EmptyArray {
-  constructor(type) {
-    Object.assign(this, { type })
-  }
-}
+// export class EmptyArray {
+//   constructor(type) {
+//     Object.assign(this, { type })
+//   }
+// }
 
 export class MemberExpression {
   constructor(object, member) {

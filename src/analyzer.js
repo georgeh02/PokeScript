@@ -18,9 +18,10 @@ class Context {
     parent = null,
     locals = new Map(),
     inLoop = false,
+    inClass = null,
     function: f = null,
   }) {
-    Object.assign(this, { parent, locals, inLoop, function: f })
+    Object.assign(this, { parent, locals, inLoop, inClass, function: f })
   }
   add(name, entity) {
     this.locals.set(name, entity)
@@ -29,7 +30,13 @@ class Context {
     return this.locals.get(name) || this.parent?.lookup(name)
   }
   newChildContext(props) {
-    return new Context({ ...this, ...props, parent: this, locals: new Map() })
+    return new Context({
+      ...this,
+      ...props,
+      parent: this,
+      locals: new Map(),
+      inClass: null,
+    })
   }
 }
 
@@ -56,6 +63,10 @@ export default function analyze(match) {
     must(equivalent(e1.type, e2.type), "Operands do not have the same type", at)
   }
 
+  function mustNotBeReadOnly(e, at) {
+    must(!e.readOnly, `Cannot assign to constant ${e.name}`, at)
+  }
+
   function equivalent(t1, t2) {
     return (
       t1 === t2 ||
@@ -75,6 +86,7 @@ export default function analyze(match) {
   }
 
   function mustNotAlreadyBeDeclared(name, at) {
+    //console.log(context)
     must(!context.lookup(name), `Identifier ${name} already declared at`, at)
   }
 
@@ -111,6 +123,34 @@ export default function analyze(match) {
   //     )
   //   }
 
+  function mustBeInAFunction(at) {
+    must(context.function, "Return can only appear in a function", at)
+  }
+
+  function mustBeInLoop(at) {
+    must(context.inLoop, "Break can only appear in a loop", at)
+  }
+
+  function mustReturnSomething(f, at) {
+    must(
+      f.type.returnType !== core.Type.VOID,
+      "Cannot return a value from this function",
+      at
+    )
+  }
+
+  function mustNotReturnAnything(f, at) {
+    must(
+      f.type.returnType === core.Type.VOID,
+      "Something should be returned",
+      at
+    )
+  }
+
+  function mustBeReturnable(e, { from: f }, at) {
+    mustBeAssignable(e, { toType: f.type.returnType }, at)
+  }
+
   function mustBeCallable(e, at) {
     const callable = e.type instanceof core.FunctionType
     must(callable, "Call of non-function", at)
@@ -122,8 +162,18 @@ export default function analyze(match) {
 
   function mustAllBeSameType(elements, at) {
     const firstType = elements[0].type
-    const allSame = elements.slice(1).every((e) => e.type === firstType)
+    const allSame = elements
+      .slice(1)
+      .every((e) => equivalent(e.type, firstType))
     must(allSame, "Mixed types in array at", at)
+  }
+
+  function memberMustBeDeclared(object, field, at) {
+    must(object.fields.map((f) => f.name).includes(field), "No such field", at)
+  }
+
+  function entityMustBeAType(e, at) {
+    must(e instanceof core.Type, "Type expected", at)
   }
 
   function mustHaveRightNumberOfArguments(argCount, paramCount, at) {
@@ -151,25 +201,18 @@ export default function analyze(match) {
       return new core.VariableDeclaration(variable, initializer)
     },
     FunDecl(_fun, id, params, _arrow, types, block) {
-      const returnType =
-        types.children.length === 0 ? core.Type.VOID : types[0].rep()
-      const fun = new core.Function(id.sourceString, returnType)
+      //   const returnType =
+      //     types.children.length === 0 ? core.Type.VOID : types[0].rep()
+      const fun = new core.Function(id.sourceString)
       mustNotAlreadyBeDeclared(id.sourceString, { at: id })
       context.add(id.sourceString, fun)
-
       context = context.newChildContext({ inLoop: false, function: fun })
       const parameters = params.rep()
-
-      // Now that the parameters are known, we compute the function's type.
-      // This is fine; we did not need the type to analyze the parameters,
-      // but we do need to set it before analyzing the body.
       const paramTypes = parameters.map((param) => param.type)
+      const returnType = types.children?.[0]?.rep() ?? core.Type.VOID
       fun.type = new core.FunctionType(paramTypes, returnType)
-
-      // Analyze body while still in child context
       const body = block.rep()
       context = context.parent
-
       return new core.FunctionDeclaration(
         fun,
         id.sourceString,
@@ -178,96 +221,213 @@ export default function analyze(match) {
       )
     },
     Params(_open, params, _close) {
+      console.log(params.asIteration().children.map((p) => p.rep()))
       return params.asIteration().children.map((p) => p.rep())
     },
     Param(type, id) {
-      return new core.Variable(id.sourceString, false, type.rep())
+      console.log("BEFORE CONTEXT", context)
+      const param = new core.Variable(id.sourceString, false, type.rep())
+      mustNotAlreadyBeDeclared(param.name, { at: id })
+      context.add(param.name, param)
+      console.log("AFTER CONTEXT", context)
+      return param
     },
     Assign(exp5, _eq, exp) {
       const target = exp5.rep()
       const source = exp.rep()
       mustBeAssignable(source, { toType: target.type }, { at: exp5 })
+      mustNotBeReadOnly(target, { at: exp5 })
       return new core.Assignment(target, source)
     },
-    Return_exp(_return, exps) {
-      return new core.ReturnStatement(exps.children[0].rep())
+    Return_exp(returnKeyword, exp) {
+      mustBeInAFunction({ at: returnKeyword })
+      mustReturnSomething(context.function, { at: returnKeyword })
+
+      const returnExpression = exp.rep()
+      mustBeReturnable(
+        returnExpression,
+        { from: context.function },
+        { at: exp }
+      )
+      return new core.ReturnStatement(returnExpression)
     },
-    Return_short(_return) {
+    Return_short(returnKeyword) {
+      mustBeInAFunction({ at: returnKeyword })
+      mustNotReturnAnything(context.function, { at: returnKeyword })
       return new core.ShortReturnStatement()
+    },
+    break(breakKeyword) {
+      mustBeInLoop({ at: breakKeyword })
+      return new core.BreakStatement()
     },
     LoopStmt_while(_while, exp, block) {
       const test = exp.rep()
       MustBeABoolean(test, { at: exp })
+      context = context.newChildContext({ inLoop: true })
       const body = block.rep()
+      context = context.parent
       return new core.WhileStatement(test, body)
     },
     LoopStmt_ForEach(_for, type, id, _in, exp, block) {
+      const collection = exp.rep()
+      mustBeAnArray(collection, { at: exp })
       const iterator = new core.Variable(
         id.sourceString,
         true,
         collection.type.baseType
       )
-      return new core.ForEachStatement(iterator, exp.rep(), block.rep())
+      context = context.newChildContext({ inLoop: true })
+      context.add(iterator.name, iterator)
+      const body = block.rep()
+      context = context.parent
+      return new core.ForEachStatement(iterator, collection, body)
     },
     LoopStmt_For(_for, type, id, _eq, exp1, _until, exp2, block) {
+      const [low, high] = [exp1.rep(), exp2.rep()]
+      mustBeAnInteger(low, { at: exp1 })
+      mustBeAnInteger(high, { at: exp2 })
       const iterator = new core.Variable(id.sourceString, true, core.Type.INT)
-      return new core.ForStatement(
-        iterator,
-        exp1.rep(),
-        exp2.rep(),
-        block.rep()
-      )
+      context = context.newChildContext({ inLoop: true })
+      context.add(id.sourceString, iterator)
+      const body = block.rep()
+      context = context.parent
+      return new core.ForStatement(iterator, low, high, body)
     },
     IfStmt_long(_if, exp, block1, _else, block2) {
-      return new core.IfStatement(exp.rep(), block1.rep(), block2.rep())
+      const test = exp.rep()
+      MustBeABoolean(test, { at: exp })
+      context = context.newChildContext()
+      const consequent = block1.rep()
+      context = context.parent
+      context = context.newChildContext()
+      const alternate = block2.rep()
+      context = context.parent
+      return new core.IfStatement(test, consequent, alternate)
     },
     IfStmt_elsif(_if, exp, block, _else, ifstmt) {
-      return new core.IfStatement(exp.rep(), block.rep(), ifstmt.rep())
+      const test = exp.rep()
+      MustBeABoolean(test, { at: exp })
+      context = context.newChildContext()
+      const consequent = block.rep()
+      // Do NOT make a new context for the alternate!
+      const alternate = ifstmt.rep()
+      return new core.IfStatement(test, consequent, alternate)
     },
     IfStmt_short(_if, exp, block) {
-      return new core.ShortItStatement(exp.rep(), block.rep())
+      const test = exp.rep()
+      MustBeABoolean(test, { at: exp })
+      context = context.newChildContext()
+      const consequent = block.rep()
+      context = context.parent
+      return new core.ShortIfStatement(test, consequent)
     },
     Block(_open, statements, _close) {
       return statements.children.map((s) => s.rep())
     },
     ClassDecl(_class, id, _left, constructor, methods, _right) {
-      return new core.ClassDeclaration(id, constructor, methods)
+      //console.log(context)
+      const className = new core.ClassType(id.sourceString, true)
+      context.add(id.sourceString, className)
+      return new core.ClassDeclaration(
+        className,
+        constructor.rep(),
+        methods.rep()
+      )
+
+      //   const classType = new core.ClassType(id.sourceString, constructor.rep())
+      //   context.add(id.sourceString, classType)
+      //   classType.methods = methods.children.map((method) => method.rep())
+
+      //   return new core.ClassDeclaration(
+      //     id.sourceString,
+      //     classType.constructor,
+      //     classType.methods
+      //   )
     },
-    ConstructorDecl(_construct, _left, params, _right, _open, body, _close) {
-      return new core.ConstructorDeclaration(params, body)
+    ConstructorDecl(_construct, params, _open, block, _close) {
+      params = params.rep()
+
+      //console.log(context)
+      //params = params.asIteration().children
+      //console.log(params.asIteration().children.map((p) => p.rep()))
+      const starter = new core.Constructor("starter", params.children.length)
+      context.add("starter", starter)
+      context = context.newChildContext({ inLoop: false, starter })
+
+      const field = block.rep()
+      context = context.parent
+
+      return new core.ConstructorDeclaration(params.rep(), field)
     },
     Field(type, _this, _dot, id, _eq, exp) {
       return new core.Field(type.rep(), id.sourceString, exp.rep())
     },
     MethodDecl(_function, id, _open, params, _close, _arrow, type, block) {
-      return new core.MethodDeclaration(id, params, block, type)
+      const paramReps = params.asIteration().rep()
+      const paramTypes = paramReps.map((p) => p.type)
+      const f = new core.Function(
+        id.sourceString,
+        new core.FunctionType(paramTypes, returnType.rep())
+      )
+      context.add(id.sourceString, f)
+      context = context.newChildContext({ inLoop: false, function: f })
+      for (const p of paramReps) {
+        context.add(p.name, p)
+      }
+      const b = body.rep()
+      context = context.parent
+      return new core.MethodDeclaration(id.sourceString, paramReps, b)
     },
     Exp_ternary(exp, _questionMark, exp1, colon, exp2) {
-      return new core.Conditional(exp.rep(), exp1.rep(), exp2.rep())
+      const test = exp.rep()
+      MustBeABoolean(test, { at: exp })
+      const [consequent, alternate] = [exp1.rep(), exp2.rep()]
+      MustHaveSameType(consequent, alternate, { at: colon })
+      return new core.Conditional(test, consequent, alternate)
     },
     Exp0_or(exp, _ops, exps) {
-      return new core.BinaryExpression(
-        "||",
-        exp.rep(),
-        exps.asIteration().children.map((e) => e.rep()),
-        core.Type.BOOLEAN
-      )
+      let left = exp.rep()
+      MustBeABoolean(left, { at: exp })
+      for (let e of exps.children) {
+        let right = e.rep()
+        MustBeABoolean(right, { at: e })
+        left = new core.BinaryExpression("||", left, right, core.Type.BOOLEAN)
+      }
+      return left
+      //   return new core.BinaryExpression(
+      //     "||",
+      //     exp.rep(),
+      //     exps.asIteration().children.map((e) => e.rep()),
+      //     core.Type.BOOLEAN
+      //   )
     },
     Exp0_and(exp, _ops, exps) {
-      return new core.BinaryExpression(
-        "&&",
-        exp.rep(),
-        exps.asIteration().children.map((e) => e.rep()),
-        core.Type.BOOLEAN
-      )
+      let left = exp.rep()
+      MustBeABoolean(left, { at: exp })
+      for (let e of exps.children) {
+        let right = e.rep()
+        MustBeABoolean(right, { at: e })
+        left = new core.BinaryExpression("&&", left, right, core.Type.BOOLEAN)
+      }
+      return left
+      //   return new core.BinaryExpression(
+      //     "&&",
+      //     exp.rep(),
+      //     exps.asIteration().children.map((e) => e.rep()),
+      //     core.Type.BOOLEAN
+      //   )
     },
     Exp1_binary(exp1, relop, exp2) {
       const left = exp1.rep()
-      mustHaveNumericType(left, { at: exp1 })
+
       const operator = relop.sourceString
       const right = exp2.rep()
-      mustHaveNumericType(right, { at: exp2 })
-      return new core.BinaryExpression(left, operator, right, core.Type.BOOLEAN)
+
+      if (["<", "<=", ">", ">="].includes(operator)) {
+        mustHaveNumericType(left, { at: exp1 })
+      }
+      MustHaveSameType(left, right, { at: relop })
+      return new core.BinaryExpression(operator, left, right, core.Type.BOOLEAN)
     },
     Exp2_binary(exp1, addOp, exp2) {
       const exp = exp1.rep()
@@ -275,7 +435,7 @@ export default function analyze(match) {
       const operator = addOp.sourceString
       const term = exp2.rep()
       mustHaveNumericType(term, { at: exp2 })
-      return new core.BinaryExpression(exp, operator, term, exp.type)
+      return new core.BinaryExpression(operator, exp, term, exp.type)
     },
     Exp3_binary(exp1, mulOp, exp2) {
       const exp = exp1.rep()
@@ -283,7 +443,7 @@ export default function analyze(match) {
       const operator = mulOp.sourceString
       const term = exp2.rep()
       MustHaveSameType(exp, term, { at: mulOp })
-      return new core.BinaryExpression(exp, operator, term, exp.type)
+      return new core.BinaryExpression(operator, exp, term, exp.type)
     },
     Exp4_binary(exp1, powerOp, exp2) {
       const [exp, operator, term] = [
@@ -293,7 +453,7 @@ export default function analyze(match) {
       ]
       mustHaveNumericType(exp, { at: exp1 })
       mustHaveNumericType(term, { at: exp2 })
-      return new core.BinaryExpression(exp, operator, term, exp.type)
+      return new core.BinaryExpression(operator, exp, term, exp.type)
     },
     Exp4_unary(unaryOp, exp) {
       if (unaryOp.sourceString === "-") {
@@ -316,7 +476,6 @@ export default function analyze(match) {
       return new core.SubscriptExpression(array, subscript, array.type.baseType)
     },
     Exp5_id(id) {
-      //TODO: check that it hasn't been previously declared
       const entity = context.lookup(id.sourceString)
       MustBeDeclared(entity, id, { at: id })
       return entity
@@ -331,12 +490,13 @@ export default function analyze(match) {
       return new core.MapType(type1.rep(), type2.rep())
     },
     Type_function(_left, types, _right, _arrow, type) {
-      return new core.FunctionType(
-        types.asIteration().children.map((t) => t.rep()),
-        type.rep()
-      )
+      const paramTypes = types.asIteration().children.map((t) => t.rep())
+      const returnType = type.rep()
+      return new core.FunctionType(paramTypes, returnType)
     },
     Type_id(id) {
+      //const entity = context.lookup(id.sourceString)
+      //entityMustBeAType(id.sourceString, { at: id })
       return id.sourceString
     },
     intlit(_digits) {
@@ -355,15 +515,28 @@ export default function analyze(match) {
       return new core.ArrayExpression(elements, arrayType)
     },
     MapLit(_open, mapentries, _close) {
-      return new core.MapExpression(
-        mapentries.asIteration().children.map((m) => m.rep())
-      )
+      const entries = mapentries.asIteration().children.map((m) => m.rep())
+      mustAllBeSameType(entries, { at: mapentries })
+      let mapType
+      if (entries.length > 0) {
+        mapType = new core.MapType(entries[0].keyType, entries[0].valueType)
+      } else {
+        mapType = new core.MapType(Type.ANY, Type.ANY)
+      }
+      return new core.MapExpression(entries, mapType)
     },
     MapEntry(exp5, _colon, exp) {
       return new core.MapEntry(exp5.rep(), exp.rep())
     },
     Member(exp5, _dot, id) {
-      return new core.MemberExpression(exp5.rep(), id.sourceString)
+      const object = exp5.rep()
+      memberMustBeDeclared(object.type, id.sourceString, { at: id })
+      const field = object.type.fields.find((f) => f.name === id.sourceString)
+      return new core.MemberExpression(object, field)
+    },
+    ObjectDec(_new, id, _open, exps, _close) {
+      params = exps.asIteration().children.map((e) => e.rep())
+      return new core.ObjectDec(id.sourceString, params)
     },
     Call(id, open, expList, _close) {
       const callee = id.rep()

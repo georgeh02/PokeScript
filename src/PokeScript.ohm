@@ -38,7 +38,7 @@ PokeScript {
 
   ClassDecl       = class id "{" ConstructorDecl MethodDecl* "}"
 
-  ConstructorDecl = construct "(" ListOf<Param, ","> ")" "{" Field* "}"
+  ConstructorDecl = construct Params "{" Field* "}"
 
   Field       	  =  Type this "." id "=" Exp
 
@@ -66,6 +66,7 @@ PokeScript {
                   | Call ~mut
                   | Exp5 "[" Exp "]"                                             --subscript
                   | Member
+                  | ObjectDec
                   | strlit ~mut
                   | id                                                           --id
                   | ArrayLit ~mut
@@ -118,6 +119,7 @@ PokeScript {
                   | break | return | true | false | this | construct | class | new
   id              = ~keyword letter idchar*
   idchar          = letter | digit | "_"
+  ObjectDec       = new id "(" ListOf<Exp, ","> ")"
 
   space           += "ϞϞ(๑⚈ ․̫ ⚈๑)∩" (~"\n" any)* ("\n" | end)                  --comment
 

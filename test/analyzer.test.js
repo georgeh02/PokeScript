@@ -5,12 +5,29 @@ import * as core from "../src/core.js"
 
 const semanticChecks = [
   ["variables can be printed", "poke x = 1 pika x"],
+  ["variable declarations", "poke x = 1 const y = 1"],
+  ["assign array element", "poke x = [1, 2, 3] x[1] = 100"],
+  ["short return", "ability f() {return}"],
+  // ["long return", "ability f() -> capture {return fail}"],
+  ["return in nested if", "ability f() {catch success {return}}"],
+  ["break in nested if", "while fail {catch success {retreat}}"],
+  ["long if", "catch success {pika 1} release {pika 0}"],
+  [
+    "elsif",
+    "catch success {pika 1} release catch success {pika 0} release {pika 2}",
+  ],
+  ["for each", "evolve poke i in [1, 2, 3] {pika i}"],
+  ["for", "evolve pokedollar i = 1 until 5 {pika i}"],
   ["variables can be reassigned", "poke x = 1 \n x = (x * 5 / ((-3) + x))"],
-  // [
-  //   "all predefined identifiers",
-  //   "pika ln(sqrt(sin(cos(hypot(π,1) + exp(5.5E2)))))",
-  // ],
-  ["comparisons", "pika(3<5)"],
+  ["conditionals with ints", "pika success ? 8 : 5"],
+  ["conditionals with floats", "pika 1<2 ? 8.0 : -5.22"],
+  ["conditionals with strings", 'pika 1<2 ? "x" : "y"'],
+  ["||", "pika success || 1<2 || fail || !success"],
+  ["&&", "pika success && 1<2 && fail && !success"],
+  ["ok to == arrays", "pika([1]==[5,8])"],
+  ["ok to != arrays", "pika([1]!=[5,8])"],
+  // ["all predefined identifiers", "pika ln(sin(cos(hypot(π,1) + exp(5.5E2))))"],
+  ["comparisons", "pika 3<5 "],
   ["additions", "pika 7 - 2 + 5"],
   ["exponentiations", "pika(7 ** 3 ** 2.5 ** 5)"],
   ["negations", "pika (7 * (-3))"],
@@ -22,7 +39,14 @@ const semanticChecks = [
   ["subscripted is a number", "poke a=[1, 2, 3] pika a[0]-5"],
   ["subscripted is a boolean", "poke a=[fail] while a[0] {}"],
   ["built-in sin", "pika(sin(π))"],
+  // [
+  //   "member exp",
+  //   `train S {starter(pokedollar x) {pokedollar this.value = x} ability run() -> pokestring {pika "got away safely" }} poke y = new S(1) pika y.x`,
+  // ],
+  ["empty class", "train S {starter(pokedollar x) {}}"],
 ]
+
+// ["", ""],
 
 const semanticErrors = [
   ["using undeclared identifiers", "pika x", /x not declared/],
