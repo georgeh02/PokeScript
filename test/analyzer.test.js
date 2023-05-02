@@ -8,7 +8,7 @@ const semanticChecks = [
   ["variable declarations", "poke x = 1 const y = 1"],
   ["assign array element", "poke x = [1, 2, 3] x[1] = 100"],
   ["short return", "ability f() {return}"],
-  // ["long return", "ability f() -> capture {return fail}"],
+  ["long return", "ability f() -> capture {return fail}"],
   ["return in nested if", "ability f() {catch success {return}}"],
   ["break in nested if", "while fail {catch success {retreat}}"],
   ["long if", "catch success {pika 1} release {pika 0}"],

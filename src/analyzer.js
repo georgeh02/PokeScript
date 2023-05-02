@@ -95,6 +95,7 @@ export default function analyze(match) {
   }
 
   function assignable(fromType, toType) {
+    console.log(fromType, "h", toType)
     return (
       toType == core.Type.ANY ||
       equivalent(fromType, toType) ||
@@ -152,7 +153,6 @@ export default function analyze(match) {
   }
 
   function mustBeReturnable(e, { from: f }, at) {
-    //console.log(f)
     mustBeAssignable(e, { toType: f.type.returnType }, at)
   }
 
@@ -212,8 +212,15 @@ export default function analyze(match) {
       context = context.newChildContext({ inLoop: false, function: fun })
       const parameters = params.rep()
       const paramTypes = parameters.map((param) => param.type)
+      console.log("paramTypes:", paramTypes)
+      //const returnType = types.children?.[0]?.rep() ?? core.Type.VOID
       const returnType = types.children?.[0]?.rep() ?? core.Type.VOID
+      console.log(returnType)
+      //   const elements = exps.asIteration().children.map((e) => e.rep())
+      //const arrayType = new core.ArrayType(elements[0].type)
+
       fun.type = new core.FunctionType(paramTypes, returnType)
+      console.log(fun.type)
       const body = block.rep()
       context = context.parent
       return new core.FunctionDeclaration(
@@ -224,15 +231,7 @@ export default function analyze(match) {
       )
     },
     Params(_open, params, _close) {
-      //let result = []
-      //console.log(params.asIteration().children)
       return params.asIteration().children.map((p) => p.rep())
-      //   for (let i = 0; i < children.length; i++) {
-      //     const p = children[i]
-      //     result.push(p.rep())
-      //   }
-      //   return result
-      //return children.
     },
     Param(type, id) {
       const param = new core.Variable(id.sourceString, false, type.rep())
