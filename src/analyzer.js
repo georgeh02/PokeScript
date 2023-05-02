@@ -70,6 +70,8 @@ export default function analyze(match) {
   function equivalent(t1, t2) {
     return (
       t1 === t2 ||
+      t1.description === t2 ||
+      t2.description === t1 ||
       (t1 instanceof core.ArrayType &&
         t2 instanceof core.ArrayType &&
         equivalent(t1.baseType, t2.baseType)) ||
@@ -95,7 +97,6 @@ export default function analyze(match) {
   }
 
   function assignable(fromType, toType) {
-    console.log(fromType, "h", toType)
     return (
       toType == core.Type.ANY ||
       equivalent(fromType, toType) ||
@@ -350,7 +351,6 @@ export default function analyze(match) {
     },
     Field(type, _this, _dot, id, _eq, exp) {
       //entityMustBeAType(type.rep(), { at: type })
-      //console.log("ok")
       //context.add(id.sourceString, exp)
       return new core.Field(type.rep(), id.sourceString, exp.rep())
     },
