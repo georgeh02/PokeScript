@@ -42,7 +42,7 @@ PokeScript {
 
   Field       	  =  Type this "." id "=" Exp
 
-  MethodDecl      = function id Params "->" Type Block
+  MethodDecl      = function id Params ("->" Type)? Block
 
   Exp             = Exp0 "?" Exp0 ":" Exp                                        --ternary
                   | Exp0
