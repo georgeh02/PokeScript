@@ -89,26 +89,27 @@ export class FunctionType extends Type {
 //   }
 // }
 
-export class ClassType {
-  constructor(name, readOnly) {
-    Object.assign(this, { name, readOnly })
+export class ClassType extends Type {
+  constructor(name) {
+    super(name)
+    Object.assign(this, { name })
   }
 }
 
 export class ClassDeclaration {
-  constructor(id, constructorDec, methods) {
-    Object.assign(this, { id, constructorDec, methods })
+  constructor(name, constructor, methods) {
+    Object.assign(this, { name, constructor, methods })
   }
 }
 export class ConstructorDeclaration {
-  constructor(params, body) {
-    Object.assign(this, { params, body })
+  constructor(constructor) {
+    Object.assign(this, { constructor })
   }
 }
 
 export class Constructor {
-  constructor(name, paramCount) {
-    Object.assign(this, { name, paramCount })
+  constructor(name, params, fields) {
+    Object.assign(this, { name, params, fields })
   }
 }
 
@@ -119,8 +120,8 @@ export class ObjectDec {
 }
 
 export class MethodDeclaration {
-  constructor(name, params, body, returnType) {
-    Object.assign(this, { name, params, body, returnType })
+  constructor(method, name, params, body, returnType) {
+    Object.assign(this, { method, name, params, body, returnType })
   }
 }
 

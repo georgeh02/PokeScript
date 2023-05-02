@@ -44,6 +44,7 @@ const semanticChecks = [
   //   `train S {starter(pokedollar x) {pokedollar this.value = x} ability run() -> pokestring {pika "got away safely" }} poke y = new S(1) pika y.x`,
   // ],
   ["empty class", "train S {starter(pokedollar x) {}}"],
+  ["function", "ability f(pokedollar x) {}"],
 ]
 
 // ["", ""],

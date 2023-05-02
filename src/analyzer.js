@@ -27,7 +27,7 @@ class Context {
     this.locals.set(name, entity)
   }
   lookup(name) {
-    return this.locals.get(name) || this.parent?.lookup(name)
+    return this.locals.get(name) ?? this.parent?.lookup(name)
   }
   newChildContext(props) {
     return new Context({
@@ -87,7 +87,11 @@ export default function analyze(match) {
 
   function mustNotAlreadyBeDeclared(name, at) {
     //console.log(context)
-    must(!context.lookup(name), `Identifier ${name} already declared at`, at)
+    must(
+      context.lookup(name) === undefined,
+      `Identifier ${name} already declared at`,
+      at
+    )
   }
 
   function assignable(fromType, toType) {
@@ -219,13 +223,26 @@ export default function analyze(match) {
       )
     },
     Params(_open, params, _close) {
-      console.log(params.asIteration().children.map((p) => p.rep()))
-      return params.asIteration().children.map((p) => p.rep())
+      //console.log("1", context)
+      //   console.log(params.asIteration().children.map((p) => p.rep()))
+      //   return params.asIteration().children.map((p) => p.rep())
+
+      let result = []
+      const children = params.asIteration().children
+      for (let i = 0; i < children.length; i++) {
+        const p = children[i]
+        result.push(p.rep())
+      }
+      //console.log(result)
+      return result
     },
     Param(type, id) {
+      //console.log("2", context)
       const param = new core.Variable(id.sourceString, false, type.rep())
       mustNotAlreadyBeDeclared(param.name, { at: id })
+      //console.log("3", context)
       context.add(param.name, param)
+      //console.log(context)
       return param
     },
     Assign(exp5, _eq, exp) {
@@ -321,44 +338,51 @@ export default function analyze(match) {
       return statements.children.map((s) => s.rep())
     },
     ClassDecl(_class, id, _left, constructor, methods, _right) {
-      //console.log(context)
-      const className = new core.ClassType(id.sourceString, true)
-      context.add(id.sourceString, className)
-      return new core.ClassDeclaration(
-        className,
-        constructor.rep(),
-        methods.rep()
-      )
+      const classType = new core.ClassType(id.sourceString)
+      //mustnotalreadybedeclared
+      context.add(id.sourceString, classType)
+      methods = methods.children.map((m) => m.rep())
+      return new core.ClassDeclaration(classType, constructor.rep(), methods)
     },
-    ConstructorDecl(_construct, params, _open, block, _close) {
+    ConstructorDecl(_construct, params, _open, fields, _close) {
       params = params.rep()
-      const starter = new core.Constructor("starter", params.children.length)
+      const starter = new core.Constructor("starter", params, [])
+      mustNotAlreadyBeDeclared("starter", { at: "starter" })
       context.add("starter", starter)
       context = context.newChildContext({ inLoop: false, starter })
-
-      const field = block.rep()
+      starter.fields = fields.children.map((f) => f.rep())
       context = context.parent
-
-      return new core.ConstructorDeclaration(params, field)
+      return new core.ConstructorDeclaration(starter)
     },
     Field(type, _this, _dot, id, _eq, exp) {
+      //entityMustBeAType(type.rep(), { at: type })
+      //console.log("ok")
+      //context.add(id.sourceString, exp)
       return new core.Field(type.rep(), id.sourceString, exp.rep())
     },
-    MethodDecl(_function, id, _open, params, _close, _arrow, type, block) {
-      const paramReps = params.asIteration().rep()
-      const paramTypes = paramReps.map((p) => p.type)
-      const f = new core.Function(
-        id.sourceString,
-        new core.FunctionType(paramTypes, returnType.rep())
-      )
-      context.add(id.sourceString, f)
-      context = context.newChildContext({ inLoop: false, function: f })
-      for (const p of paramReps) {
-        context.add(p.name, p)
-      }
-      const b = body.rep()
+    MethodDecl(_function, id, params, _arrow, type, block) {
+      params = params.rep()
+
+      const method = new core.Function(id.sourceString)
+      //mustnotalreadybedeclared
+
+      context.add(id.sourceString, method)
+      context = context.newChildContext({ inLoop: false, function: method })
+
+      const paramTypes = params.map((p) => p.type)
+      const returnType = type.children?.[0]?.rep()
+      method.type = new core.FunctionType(paramTypes, returnType)
+
+      const body = block.rep()
       context = context.parent
-      return new core.MethodDeclaration(id.sourceString, paramReps, b)
+
+      return new core.MethodDeclaration(
+        method,
+        id.sourceString,
+        params,
+        body,
+        returnType
+      )
     },
     Exp_ternary(exp, _questionMark, exp1, colon, exp2) {
       const test = exp.rep()
