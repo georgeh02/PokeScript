@@ -114,8 +114,8 @@ export class Constructor {
 }
 
 export class ObjectDec {
-  constructor(id, args) {
-    Object.assign(this, { id, args })
+  constructor(object, args) {
+    Object.assign(this, { object, args })
   }
 }
 

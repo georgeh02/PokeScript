@@ -39,6 +39,10 @@ const semanticChecks = [
   ["subscripted is a number", "poke a=[1, 2, 3] pika a[0]-5"],
   ["subscripted is a boolean", "poke a=[fail] while a[0] {}"],
   ["built-in sin", "pika(sin(π))"],
+  [
+    "object dec",
+    `train S {starter(pokedollar x) {pokedollar this.value = x} ability run() -> pokestring {pika "got away safely" }} poke y = new S(1)`,
+  ],
   // [
   //   "member exp",
   //   `train S {starter(pokedollar x) {pokedollar this.value = x} ability run() -> pokestring {pika "got away safely" }} poke y = new S(1) pika y.x`,
@@ -87,10 +91,32 @@ const semanticErrors = [
     "poke a = [1, 2, 3] pika a[fail]",
     /Integer expected at/,
   ],
+  [
+    "bad return type in class method",
+    "train S {starter(pokedollar x) {pokedollar this.level = x} ability f() -> pokestring {return fail}}",
+    /Cannot assign a capture to a pokestring/,
+  ],
+  [
+    "class with no constructor",
+    "train S {ability f() {}}",
+    /Expected "starter"/,
+  ],
+  [
+    "function with bad types",
+    "ability f() -> pokestring {return 1}",
+    /Cannot assign a pokedollar to a pokestring/,
+  ],
+  [
+    "declaring class that already exists",
+    "train S {starter() {}} train S {starter() {}}",
+    /S already declared at/,
+  ],
+  [
+    "declaring function that already exists",
+    "ability f() {} ability f() {}",
+    /Identifier f already declared at/,
+  ],
 ]
-
-// const sample =
-//   "poke x=sqrt(9) function f(x)=3*x train(success){x=3 pika(0?f(x)->2)}"
 
 describe("The analyzer", () => {
   for (const [scenario, source] of semanticChecks) {

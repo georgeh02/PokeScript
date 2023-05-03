@@ -113,7 +113,9 @@ export default function analyze(match) {
   }
 
   function mustBeAssignable(e, { toType: type }, at) {
-    const message = `Cannot assign a ${e.type.description} to a ${type.description}`
+    const message = `Cannot assign a ${e.type.description ?? e.type} to a ${
+      type.description ?? type
+    }`
     must(assignable(e.type, type), message, at)
   }
 
@@ -179,7 +181,14 @@ export default function analyze(match) {
   }
 
   function entityMustBeAType(e, at) {
-    must(e instanceof core.Type, "Type expected", at)
+    const types = Object.values(core.Type).map((type) => type.description)
+    must(e instanceof core.Type || types.includes(e), "Type expected", at)
+
+    // must(
+    //   e instanceof core.Type || core.Type.map((t) => t.description).includes[e],
+    //   "Type expected",
+    //   at
+    // )
   }
 
   function mustHaveRightNumberOfArguments(argCount, paramCount, at) {
@@ -213,15 +222,8 @@ export default function analyze(match) {
       context = context.newChildContext({ inLoop: false, function: fun })
       const parameters = params.rep()
       const paramTypes = parameters.map((param) => param.type)
-      console.log("paramTypes:", paramTypes)
-      //const returnType = types.children?.[0]?.rep() ?? core.Type.VOID
       const returnType = types.children?.[0]?.rep() ?? core.Type.VOID
-      console.log(returnType)
-      //   const elements = exps.asIteration().children.map((e) => e.rep())
-      //const arrayType = new core.ArrayType(elements[0].type)
-
       fun.type = new core.FunctionType(paramTypes, returnType)
-      console.log(fun.type)
       const body = block.rep()
       context = context.parent
       return new core.FunctionDeclaration(
@@ -334,7 +336,7 @@ export default function analyze(match) {
     },
     ClassDecl(_class, id, _left, constructor, methods, _right) {
       const classType = new core.ClassType(id.sourceString)
-      //mustnotalreadybedeclared
+      mustNotAlreadyBeDeclared(id.sourceString, { at: _class })
       context.add(id.sourceString, classType)
       methods = methods.children.map((m) => m.rep())
       return new core.ClassDeclaration(classType, constructor.rep(), methods)
@@ -342,7 +344,7 @@ export default function analyze(match) {
     ConstructorDecl(_construct, params, _open, fields, _close) {
       params = params.rep()
       const starter = new core.Constructor("starter", params, [])
-      mustNotAlreadyBeDeclared("starter", { at: "starter" })
+      mustNotAlreadyBeDeclared("starter", { at: _construct })
       context.add("starter", starter)
       context = context.newChildContext({ inLoop: false, starter })
       starter.fields = fields.children.map((f) => f.rep())
@@ -350,8 +352,9 @@ export default function analyze(match) {
       return new core.ConstructorDeclaration(starter)
     },
     Field(type, _this, _dot, id, _eq, exp) {
-      //entityMustBeAType(type.rep(), { at: type })
-      //context.add(id.sourceString, exp)
+      console.log(type.rep())
+      entityMustBeAType(type.rep(), { at: type })
+      context.add(id.sourceString, exp)
       return new core.Field(type.rep(), id.sourceString, exp.rep())
     },
     MethodDecl(_function, id, params, _arrow, type, block) {
@@ -484,7 +487,8 @@ export default function analyze(match) {
     },
     Type_id(id) {
       //const entity = context.lookup(id.sourceString)
-      //entityMustBeAType(id.sourceString, { at: id })
+      //context.add()
+      entityMustBeAType(id.sourceString, { at: id })
       return id.sourceString
     },
     intlit(_digits) {
@@ -518,12 +522,20 @@ export default function analyze(match) {
     },
     Member(exp5, _dot, id) {
       const object = exp5.rep()
+      console.log(context.lookup(object.name))
+      console.log(context)
+      //find class called exp5.rep()
+      console.log(object)
       memberMustBeDeclared(object.type, id.sourceString, { at: id })
       const field = object.type.fields.find((f) => f.name === id.sourceString)
       return new core.MemberExpression(object, field)
     },
     ObjectDec(_new, id, _open, exps, _close) {
-      params = exps.asIteration().children.map((e) => e.rep())
+      //mustbedeclared
+      const params = exps.asIteration().children.map((e) => e.rep())
+      console.log(new core.ClassType(id.sourceString))
+      //const object = new core.Class
+      console.log(params)
       return new core.ObjectDec(id.sourceString, params)
     },
     Call(id, open, expList, _close) {
