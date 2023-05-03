@@ -53,6 +53,11 @@ const semanticChecks = [
     `train S {starter(pokedollar x) {pokedollar this.level = x} ability run() -> pokestring {return "got away safely"}}`,
   ],
   ["function", "ability f(pokedollar x) -> pokedollar {return x}"],
+  ["array type for return", "ability f() -> [pokedollar] {}"],
+  ["array type for param", "ability f([pokedollar] x) {}"],
+  ["map type for return", "ability f() -> {pokedollar, pokestring} {}"],
+  ["map type for param", "ability f({pokedollar, pokestring} x) {}"],
+  ["map", "{pokedollar, pokedollar} x =  {5: 3, 2: 5, 6: 8}"],
 ]
 
 // ["", ""],
@@ -116,6 +121,12 @@ const semanticErrors = [
     "ability f() {} ability f() {}",
     /Identifier f already declared at/,
   ],
+  [
+    "map with incorrect types",
+    "{capture, pokedollar} x =  {fail: 3, 5: 2}",
+    /Mixed types in map at/,
+  ],
+  // ["map", "{}"]
 ]
 
 describe("The analyzer", () => {

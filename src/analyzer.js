@@ -69,9 +69,7 @@ export default function analyze(match) {
 
   function equivalent(t1, t2) {
     return (
-      t1 === t2 ||
-      t1.description === t2 ||
-      t2.description === t1 ||
+      (t1.description ?? t1) === (t2.description ?? t2) ||
       (t1 instanceof core.ArrayType &&
         t2 instanceof core.ArrayType &&
         equivalent(t1.baseType, t2.baseType)) ||
@@ -169,11 +167,23 @@ export default function analyze(match) {
   }
 
   function mustAllBeSameType(elements, at) {
-    const firstType = elements[0].type
-    const allSame = elements
-      .slice(1)
-      .every((e) => equivalent(e.type, firstType))
-    must(allSame, "Mixed types in array at", at)
+    if (elements[0].constructor.name === "MapEntry") {
+      const keyType = elements[0].key.type
+      const valueType = elements[0].value.type
+      const sameKeys = elements
+        .slice(1)
+        .every((e) => equivalent(e.key.type, keyType))
+      const sameValues = elements
+        .slice(1)
+        .every((e) => equivalent(e.value.type, valueType))
+      must(sameKeys && sameValues, "Mixed types in map at", at)
+    } else {
+      const firstType = elements[0].type
+      const allSame = elements
+        .slice(1)
+        .every((e) => equivalent(e.type, firstType))
+      must(allSame, "Mixed types in array at", at)
+    }
   }
 
   function memberMustBeDeclared(object, field, at) {
@@ -511,7 +521,7 @@ export default function analyze(match) {
       mustAllBeSameType(entries, { at: mapentries })
       let mapType
       if (entries.length > 0) {
-        mapType = new core.MapType(entries[0].keyType, entries[0].valueType)
+        mapType = new core.MapType(entries[0].key.type, entries[0].value.type)
       } else {
         mapType = new core.MapType(Type.ANY, Type.ANY)
       }
