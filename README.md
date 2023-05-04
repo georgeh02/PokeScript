@@ -104,15 +104,13 @@ const x = 5</code></pre>
             <pre><code>
 function add(a, b) {
     return a + b
-}
-            </code></pre>
+}</code></pre>
         </td>
         <td>
             <pre><code>
 ability add(pokedollar a, pokedollar b) {
     return a + b
-}
-            </code></pre>
+}</code></pre>
         </td>
     </tr>
 </table>
