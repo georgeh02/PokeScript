@@ -10,47 +10,106 @@ Created by George Harrison
 
 ## PokeScript Features
 
-    - Inspired by JavaScript and Python
-    - Pokemon Themed
-    - Static typing
-    - Object oriented
-    - Type Inference
+- Inspired by JavaScript and Python
+- Pokemon Themed
+- Static typing
+- Object oriented
+- Type Inference
 
-## Types
+## PokeTypes
 
-| Javascript | PokeScript             |
-| ---------- | ---------------------- |
-| boolean    | capture (success/fail) |
-| String     | pokestring             |
-| Number     | pokedollar (int)       |
-| Number     | pokefloat (float)      |
+<table>
+  <tr>
+    <th>Javascript</th>
+    <th>PokeScript</th>
+  </tr>
+  <tr>
+    <td>boolean</td>
+    <td>capture (success/fail)</td>
+  </tr>
+  <tr>
+    <td>String</td>
+    <td>pokestring</td>
+  </tr>
+  <tr>
+    <td>Number</td>
+    <td>pokedollar (int)</td>
+  </tr>
+  <tr>
+    <td>Number</td>
+    <td>pokefloat (float)</td>
+  </tr>
+</table>
 
 ## Data Structures
 
-| Javascript | PokeScript |
-| ---------- | ---------- |
-| Array      | pokelist   |
-| Map        | pokedex    |
+<table>
+  <tr>
+    <th>JavaScript</th>
+    <th>PokeScript</th>
+  </tr>
+  <tr>
+    <td>Array</td>
+    <td>pokelist</td>
+  </tr>
+  <tr>
+    <td>Map</td>
+    <td>pokedex</td>
+  </tr>
+</table>
 
 ## Examples
-
-| Javascript                   | PokeScript           |
-| ---------------------------- | -------------------- |
-| `console.log("Hello World")` | `pika "Hello World"` |
-
-| Javascript    | PokeScript    |
-| ------------- | ------------- |
-| `var x = 1`   | `poke x = 1`  |
-| `const x = 1` | `const x = 1` |
 
 <table>
 <tr> <th>Javascript</th><th>PokeScript</th><tr>
 </tr>
 <td>
 
+```javascript
+console.log(“Hello world”)
 ```
+
+</td>
+
+<td>
+
+```
+pika “Hello world”
+```
+
+</td>
+</table>
+
+<table>
+<tr> <th>Javascript</th><th>PokeScript</th><tr>
+</tr>
+<td>
+
+```javascript
+var x = 1
+const x = 1
+```
+
+</td>
+
+<td>
+
+```
+poke x = 1
+const x = 5
+```
+
+</td>
+</table>
+
+<table>
+<tr> <th>Javascript</th><th>PokeScript</th><tr>
+</tr>
+<td>
+
+```javascript
 function add(a, b) {
-    return a + b;
+  return a + b
 }
 ```
 
@@ -72,13 +131,13 @@ ability add(pokedollar a, pokedollar b) {
 </tr>
 <td>
 
-```
+```javascript
 if (x == 5) {
-    return 5;
+  return 5
 } else if (x == 4) {
-    return 4;
+  return 4
 } else {
-    return 2;
+  return 2
 }
 ```
 
@@ -86,7 +145,7 @@ if (x == 5) {
 
 <td>
 
-```
+```javascript
 catch x == 5 {
     pika 5
 } release catch x == 4 {
@@ -104,7 +163,7 @@ catch x == 5 {
 </tr>
 <td>
 
-```
+```javascript
 for (int x = 3, x < 5; x++) {
     break;
 }
@@ -128,9 +187,9 @@ evolve pokedollar x = 3 until 5 {
 </tr>
 <td>
 
-```
+```javascript
 while (true) {
-    var x = 1;
+  var x = 1
 }
 ```
 
@@ -152,7 +211,7 @@ while success {
 </tr>
 <td>
 
-```
+```python
 dex = {
   "pikachu": 3,
   "charizard": 6,
@@ -176,18 +235,16 @@ dex = {
 </tr>
 <td>
 
-```
-
+```javascript
 class Pokemon {
-    constructor(level, name) {
-        this.level = level;
-        this.name = name;
-    }
-    getLevel() {
-        return this.level
-    }
+  constructor(level, name) {
+    this.level = level
+    this.name = name
+  }
+  getLevel() {
+    return this.level
+  }
 }
-
 ```
 
 </td>
@@ -211,20 +268,33 @@ train Pokemon {
 </td>
 </table>
 
-| Javascript | PokeScript           |
-| ---------- | -------------------- |
-| //comment  | ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment |
+<table>
+<tr> <th>Javascript</th><th>PokeScript</th><tr>
+</tr>
+<td> 
+    
+```javascript
+// comment
+```
+</td>
+<td>
+    
+```
+ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment
+```
+</td>
+</table>
 
 ## Types of Semantic Errors
 
-    - Using non-initialized variables
-    - Bad types in all ternary, binary, and unary operations
-    - Bad types in data structures
-    - Bad type in reassignment of variable
-    - Bad type in declaration of variable
-    - Incorrect number of function params
-    - Breaking outside of loop
-    - Returning outside of function
-    - Function with return value doesn't return anything
-    - Calling a function or method that is not intialized
-    - For loop with non-integer iterator
+- Using non-initialized variables
+- Bad types in all ternary, binary, and unary operations
+- Bad types in data structures
+- Bad type in reassignment of variable
+- Bad type in declaration of variable
+- Incorrect number of function params
+- Breaking outside of loop
+- Returning outside of function
+- Function with return value doesn't return anything
+- Calling a function or method that is not intialized
+- For loop with non-integer iterator
