@@ -1,0 +1,3 @@
+evolve pokedollar x = 3 until 5 {
+    pika x
+}

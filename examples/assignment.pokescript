@@ -1,0 +1,3 @@
+poke x = 1
+const y = 2
+pokedollar z = 3
