@@ -84,8 +84,7 @@ Created by George Harrison
         <td>
             <pre><code>
 var x = 1
-const x = 1
-            </code></pre>
+const x = 1</code></pre>
         </td>
         <td>
             <pre><code>
