@@ -19,43 +19,43 @@ Created by George Harrison
 ## PokeTypes
 
 <table>
-  <tr>
-    <th>Javascript</th>
-    <th>PokeScript</th>
-  </tr>
-  <tr>
-    <td>boolean</td>
-    <td>capture (success/fail)</td>
-  </tr>
-  <tr>
-    <td>String</td>
-    <td>pokestring</td>
-  </tr>
-  <tr>
-    <td>Number</td>
-    <td>pokedollar (int)</td>
-  </tr>
-  <tr>
-    <td>Number</td>
-    <td>pokefloat (float)</td>
-  </tr>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>boolean</td>
+        <td>capture (success/fail)</td>
+    </tr>
+    <tr>
+        <td>String</td>
+        <td>pokestring</td>
+    </tr>
+    <tr>
+        <td>Number</td>
+        <td>pokedollar (int)</td>
+    </tr>
+    <tr>
+        <td>Number</td>
+        <td>pokefloat (float)</td>
+    </tr>
 </table>
 
 ## Data Structures
 
 <table>
-  <tr>
-    <th>JavaScript</th>
-    <th>PokeScript</th>
-  </tr>
-  <tr>
-    <td>Array</td>
-    <td>pokelist</td>
-  </tr>
-  <tr>
-    <td>Map</td>
-    <td>pokedex</td>
-  </tr>
+    <tr>
+        <th>JavaScript</th>
+       <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>Array</td>
+        <td>pokelist</td>
+    </tr>
+    <tr>
+        <td>Map</td>
+        <td>pokedex</td>
+    </tr>
 </table>
 
 ## Examples
