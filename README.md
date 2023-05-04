@@ -65,7 +65,6 @@ Created by George Harrison
         <th>Javascript</th>
         <th>PokeScript</th><tr>
     </tr>
-    <tr>
         <td>
         ```javascript
         console.log(“Hello world”)
@@ -76,7 +75,6 @@ Created by George Harrison
         pika “Hello world”
         ```
         </td>
-    </tr>
 </table>
 
 <table>
