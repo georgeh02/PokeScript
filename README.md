@@ -106,7 +106,7 @@ catch x == 5 {
 
 ```
 for (int x = 3, x < 5; x++) {
-    break
+    break;
 }
 ```
 
@@ -117,6 +117,30 @@ for (int x = 3, x < 5; x++) {
 ```
 evolve pokedollar x = 3 until 5 {
     break
+}
+```
+
+</td>
+</table>
+
+<table>
+<tr> <th>Javascript</th><th>PokeScript</th><tr>
+</tr>
+<td>
+
+```
+while (true) {
+    var x = 1;
+}
+```
+
+</td>
+
+<td>
+
+```
+while success {
+    poke x = 1
 }
 ```
 
@@ -155,13 +179,13 @@ dex = {
 ```
 
 class Pokemon {
-constructor(level, name){
-this.level = level;
-this.name = name;
-}
-getLevel() {
-return this.level
-}
+    constructor(level, name) {
+        this.level = level;
+        this.name = name;
+    }
+    getLevel() {
+        return this.level
+    }
 }
 
 ```
@@ -173,13 +197,13 @@ return this.level
 ```
 
 train Pokemon {
-starter(pokedollar level, pokestring name){
-this.level = level
-this.name = name
-}
-getLevel() {
-return this.level
-}
+    starter(pokedollar level, pokestring name) {
+        this.level = level
+        this.name = name
+    }
+    getLevel() {
+        return this.level
+    }
 }
 
 ```
