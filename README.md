@@ -44,12 +44,12 @@ Created by George Harrison
 | `const x = 1` | `const x = 1` |
 
 <table>
-<tr> <th>JavaScript</th><th>PokeScript</th><tr>
+<tr> <th>Javascript</th><th>PokeScript</th><tr>
 </tr>
 <td>
 
 ```
-function add(a, b){
+function add(a, b) {
     return a + b;
 }
 ```
@@ -67,43 +67,45 @@ ability add(pokedollar a, pokedollar b) {
 </td>
 </table>
 
-| Javascript | PokeScript |
-| ---------- | ---------- |
+<table>
+<tr> <th>Javascript</th><th>PokeScript</th><tr>
+</tr>
+<td>
 
-| ```
+```
 class Pokemon {
-constructor(level, name){
-this.level = level;
-this.name = name;
+    constructor(level, name){
+        this.level = level;
+        this.name = name;
+    }
+    getLevel() {
+        return this.level
+    }
 }
-getLevel() {
-return this.level
-}
-}
-
-```
-|
 ```
 
+</td>
+
+<td>
+
+```
 train Pokemon {
-starter(pokedollar level, pokestring name){
-this.level = level;
-this.name = name;
+    starter(pokedollar level, pokestring name){
+        this.level = level
+        this.name = name
+    }
+    getLevel() {
+        return this.level
+    }
 }
-getLevel() {
-return this.level
-}
-}
-
 ```
-|
+
+</td>
+</table>
 
 | Javascript | PokeScript           |
 | ---------- | -------------------- |
 | //comment  | ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment |
-
-
-
 
 ## Types of Semantic Errors
 
@@ -118,4 +120,3 @@ return this.level
     - Function with return value doesn't return anything
     - Calling a function or method that is not intialized
     - For loop with non-integer iterator
-```
