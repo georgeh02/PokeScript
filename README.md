@@ -18,12 +18,6 @@ Created by George Harrison
 
 ## PokeTypes
 
-<style>
-td {
-  text-align: left;
-}
-</style>
-
 <table>
     <tr>
         <th>Javascript</th>
