@@ -86,20 +86,16 @@ Created by George Harrison
     </tr>
     <tr>
         <td>
-            <pre>
-<code>
+            <pre><code>
 var x = 1
 const x = 1
-                </code>
-            </pre>
+            </code></pre>
         </td>
         <td>
-            <pre>
-<code>
+            <pre><code>
 poke x = 1
 const x = 5
-</code>
-            </pre>
+            </code></pre>
         </td>
     </tr>
 </table>
@@ -111,22 +107,18 @@ const x = 5
     </tr>
     <tr>
         <td>
-            <pre>
-<code>
+            <pre><code>
 function add(a, b) {
     return a + b
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
         <td>
-            <pre>
-<code>
+            <pre><code>
 ability add(pokedollar a, pokedollar b) {
     return a + b
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
     </tr>
 </table>
@@ -138,8 +130,7 @@ ability add(pokedollar a, pokedollar b) {
     </tr>
     <tr>
         <td>
-            <pre>
-<code>
+            <pre><code>
 if (x == 5) {
     return 5
 } else if (x == 4) {
@@ -147,12 +138,10 @@ if (x == 5) {
 } else {
     return 2
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
         <td>
-            <pre>
-<code>
+            <pre><code>
 catch x == 5 {
     pika 5
 } release catch x == 4 {
@@ -160,8 +149,7 @@ catch x == 5 {
 } release {
     pika 2
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
     </tr>
 </table>
@@ -173,22 +161,18 @@ catch x == 5 {
     </tr>
     <tr>
         <td>
-            <pre>
-<code>
+            <pre><code>
 for (int x = 3, x < 5; x++) {
     break;
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
         <td>
-            <pre>
-<code>
+            <pre><code>
 evolve pokedollar x = 3 until 5 {
     break
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
     </tr>
 </table>
@@ -200,22 +184,18 @@ evolve pokedollar x = 3 until 5 {
     </tr>
     <tr>
         <td>
-            <pre>
-<code>
+            <pre><code>
 while (true) {
     var x = 1
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
         <td>
-            <pre>
-<code>
+            <pre><code>
 while success {
     poke x = 1
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
     </tr>
 </table>
@@ -227,22 +207,18 @@ while success {
     </tr>
     <tr>
         <td>
-            <pre>
-<code>
+            <pre><code>
 dex = {
     "pikachu": 3,
     "charizard": 6,
     "snorlax": 8
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
         <td>
-            <pre>
-<code>
+            <pre><code>
 {pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}
-</code>
-            </pre>
+            </code></pre>
         </td>
     </tr>
 </table>
@@ -254,8 +230,7 @@ dex = {
     </tr>
     <tr>
         <td>
-            <pre>
-<code>
+            <pre><code>
 class Pokemon {
     constructor(level, name) {
         this.level = level
@@ -265,12 +240,10 @@ class Pokemon {
         return this.level
     }
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
         <td>
-            <pre>
-<code>
+            <pre><code>
 train Pokemon {
     starter(pokedollar level, pokestring name) {
         this.level = level
@@ -280,8 +253,7 @@ train Pokemon {
         return this.level
     }
 }
-</code>
-            </pre>
+            </code></pre>
         </td>
     </tr>
 </table>
@@ -293,18 +265,14 @@ train Pokemon {
     </tr>
     <tr>
         <td>
-            <pre>
-<code>
+            <pre><code>
 // comment
-</code>
-            </pre>
+            </code></pre>
         </td>
         <td>
-            <pre>
-<code>
+            <pre><code>
 ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment
-</code>
-            </pre>
+            </code></pre>
         </td>
     </tr>
 </table>
