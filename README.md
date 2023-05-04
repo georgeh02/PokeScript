@@ -65,16 +65,14 @@ Created by George Harrison
         <th>Javascript</th>
         <th>PokeScript</th><tr>
     </tr>
+    <tr>
         <td>
-        ```javascript
-        console.log(“Hello world”)
-        ```
+            <pre><code>console.log(“Hello world”)</code></pre>
         </td>
         <td>
-        ```
-        pika “Hello world”
-        ```
+            <pre><code>pika “Hello world”</code></pre>
         </td>
+    </tr>
 </table>
 
 <table>
