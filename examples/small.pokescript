@@ -1,8 +1,2 @@
 poke x = 3
-pika(x * 5)
-x = 100 //ok
-x = false //error
-
-pika y //error
-
-poke a = ["xyz", 100, "c"] //error
+pika x * 5

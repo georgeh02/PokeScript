@@ -228,7 +228,3 @@ train Pokemon {
     - Function with return value doesn't return anything
     - Calling a function or method that is not intialized
     - For loop with non-integer iterator
-
-```
-
-```
