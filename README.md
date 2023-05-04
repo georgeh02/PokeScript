@@ -67,14 +67,10 @@ Created by George Harrison
     </tr>
     <tr>
         <td>
-            <pre>
-<code>console.log(“Hello world”)</code>
-            </pre>
+            <pre><code>console.log(“Hello world”)</code></pre>
         </td>
         <td>
-            <pre>
-<code>pika “Hello world”</code>
-            </pre>
+            <pre><code>pika “Hello world”</code></pre>
         </td>
     </tr>
 </table>
