@@ -89,8 +89,7 @@ const x = 1</code></pre>
         <td>
             <pre><code>
 poke x = 1
-const x = 5
-            </code></pre>
+const x = 5</code></pre>
         </td>
     </tr>
 </table>
