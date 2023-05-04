@@ -73,14 +73,12 @@ ability add(pokedollar a, pokedollar b) {
 <td>
 
 ```
-class Pokemon {
-    constructor(level, name){
-        this.level = level;
-        this.name = name;
-    }
-    getLevel() {
-        return this.level
-    }
+if (x == 5) {
+    return 5;
+} else if (x == 4) {
+    return 4;
+} else {
+    return 2;
 }
 ```
 
@@ -89,15 +87,103 @@ class Pokemon {
 <td>
 
 ```
-train Pokemon {
-    starter(pokedollar level, pokestring name){
-        this.level = level
-        this.name = name
-    }
-    getLevel() {
-        return this.level
-    }
+catch x == 5 {
+    pika 5
+} release catch x == 4 {
+    pika 4
+} release {
+    pika 2
 }
+```
+
+</td>
+</table>
+
+<table>
+<tr> <th>Javascript</th><th>PokeScript</th><tr>
+</tr>
+<td>
+
+```
+for (int x = 3, x < 5; x++) {
+    break
+}
+```
+
+</td>
+
+<td>
+
+```
+evolve pokedollar x = 3 until 5 {
+    break
+}
+```
+
+</td>
+</table>
+
+<table>
+<tr> <th>Python</th><th>PokeScript</th><tr>
+</tr>
+<td>
+
+````
+dex = {
+  "pikachu": 3,
+  "charizard": 6,
+  "snorlax": 8
+}
+```
+
+</td>
+
+<td>
+
+````
+
+{pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}
+
+```
+
+</td>
+</table>
+
+<table>
+<tr> <th>Javascript</th><th>PokeScript</th><tr>
+</tr>
+<td>
+
+```
+
+class Pokemon {
+constructor(level, name){
+this.level = level;
+this.name = name;
+}
+getLevel() {
+return this.level
+}
+}
+
+```
+
+</td>
+
+<td>
+
+```
+
+train Pokemon {
+starter(pokedollar level, pokestring name){
+this.level = level
+this.name = name
+}
+getLevel() {
+return this.level
+}
+}
+
 ```
 
 </td>
@@ -120,3 +206,4 @@ train Pokemon {
     - Function with return value doesn't return anything
     - Calling a function or method that is not intialized
     - For loop with non-integer iterator
+```
