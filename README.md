@@ -67,34 +67,13 @@ Created by George Harrison
     </tr>
     <tr>
         <td>
-            <pre><code>console.log(“Hello world”)</code></pre>
-        </td>
-        <td>
-            <pre><code>pika “Hello world”</code></pre>
-        </td>
-    </tr>
-</table>
-
-<table>
-    <tr>
-        <th>Javascript</th>
-        <th>PokeScript</th>
-    </tr>
-    <tr>
-        <td>
             <pre>
-                <code>
-                    var x = 1
-                    const x = 1
-                </code>
+<code>console.log(“Hello world”)</code>
             </pre>
         </td>
         <td>
             <pre>
-                <code>
-                    poke x = 1
-                    const x = 5
-                </code>
+<code>pika “Hello world”</code>
             </pre>
         </td>
     </tr>
@@ -108,55 +87,18 @@ Created by George Harrison
     <tr>
         <td>
             <pre>
-                <code>
-                    function add(a, b) {
-                        return a + b
-                    }
+<code>
+var x = 1
+const x = 1
                 </code>
             </pre>
         </td>
         <td>
             <pre>
-                <code>
-                    ability add(pokedollar a, pokedollar b) {
-                        return a + b
-                    }
-                </code>
-            </pre>
-        </td>
-    </tr>
-</table>
-
-<table>
-    <tr>
-        <th>Javascript</th>
-        <th>PokeScript</th>
-    </tr>
-    <tr>
-        <td>
-            <pre>
-                <code>
-                    if (x == 5) {
-                        return 5
-                    } else if (x == 4) {
-                        return 4
-                    } else {
-                        return 2
-                    }
-                </code>
-            </pre>
-        </td>
-        <td>
-            <pre>
-                <code>
-                    catch x == 5 {
-                        pika 5
-                    } release catch x == 4 {
-                        pika 4
-                    } release {
-                        pika 2
-                    }
-                </code>
+<code>
+poke x = 1
+const x = 5
+</code>
             </pre>
         </td>
     </tr>
@@ -170,20 +112,20 @@ Created by George Harrison
     <tr>
         <td>
             <pre>
-                <code>
-                    for (int x = 3, x < 5; x++) {
-                        break;
-                    }
-                </code>
+<code>
+function add(a, b) {
+    return a + b
+}
+</code>
             </pre>
         </td>
         <td>
             <pre>
-                <code>
-                    evolve pokedollar x = 3 until 5 {
-                        break
-                    }
-                </code>
+<code>
+ability add(pokedollar a, pokedollar b) {
+    return a + b
+}
+</code>
             </pre>
         </td>
     </tr>
@@ -197,20 +139,82 @@ Created by George Harrison
     <tr>
         <td>
             <pre>
-                <code>
-                    while (true) {
-                        var x = 1
-                    }
-                </code>
+<code>
+if (x == 5) {
+    return 5
+} else if (x == 4) {
+    return 4
+} else {
+    return 2
+}
+</code>
             </pre>
         </td>
         <td>
             <pre>
-                <code>
-                    while success {
-                        poke x = 1
-                    }
-                </code>
+<code>
+catch x == 5 {
+    pika 5
+} release catch x == 4 {
+    pika 4
+} release {
+    pika 2
+}
+</code>
+            </pre>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+<code>
+for (int x = 3, x < 5; x++) {
+    break;
+}
+</code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+<code>
+evolve pokedollar x = 3 until 5 {
+    break
+}
+</code>
+            </pre>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+<code>
+while (true) {
+    var x = 1
+}
+</code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+<code>
+while success {
+    poke x = 1
+}
+</code>
             </pre>
         </td>
     </tr>
@@ -224,59 +228,20 @@ Created by George Harrison
     <tr>
         <td>
             <pre>
-                <code>
-                    dex = {
-                      "pikachu": 3,
-                      "charizard": 6,
-                      "snorlax": 8
-                    }
-                </code>
+<code>
+dex = {
+    "pikachu": 3,
+    "charizard": 6,
+    "snorlax": 8
+}
+</code>
             </pre>
         </td>
         <td>
             <pre>
-                <code>
-                    {pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}
-                </code>
-            </pre>
-        </td>
-    </tr>
-</table>
-
-<table>
-    <tr>
-        <th>Javascript</th>
-        <th>PokeScript</th>
-    </tr>
-    <tr>
-        <td>
-            <pre>
-                <code>
-                    class Pokemon {
-                      constructor(level, name) {
-                        this.level = level
-                        this.name = name
-                      }
-                      getLevel() {
-                        return this.level
-                      }
-                    }
-                </code>
-            </pre>
-        </td>
-        <td>
-            <pre>
-                <code>
-                    train Pokemon {
-                        starter(pokedollar level, pokestring name) {
-                            this.level = level
-                            this.name = name
-                        }
-                        getLevel() {
-                            return this.level
-                        }
-                    }
-                </code>
+<code>
+{pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}
+</code>
             </pre>
         </td>
     </tr>
@@ -290,16 +255,55 @@ Created by George Harrison
     <tr>
         <td>
             <pre>
-                <code>
-                    // comment
-                </code>
+<code>
+class Pokemon {
+    constructor(level, name) {
+        this.level = level
+        this.name = name
+    }
+    getLevel() {
+        return this.level
+    }
+}
+</code>
             </pre>
         </td>
         <td>
             <pre>
-                <code>
-                    ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment
-                </code>
+<code>
+train Pokemon {
+    starter(pokedollar level, pokestring name) {
+        this.level = level
+        this.name = name
+    }
+    getLevel() {
+        return this.level
+    }
+}
+</code>
+            </pre>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+<code>
+// comment
+</code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+<code>
+ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment
+</code>
             </pre>
         </td>
     </tr>
