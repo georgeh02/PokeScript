@@ -1,6 +1,6 @@
 ![logo](docs/logo.png)
 
-# PokeScript
+# [PokeScript](https://georgeh02.github.io/PokeScript/)
 
 A compiler for the language PokeScript
 
