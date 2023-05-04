@@ -61,23 +61,22 @@ Created by George Harrison
 ## Examples
 
 <table>
-<tr> <th>Javascript</th><th>PokeScript</th><tr>
-</tr>
-<td>
-
-```javascript
-console.log(“Hello world”)
-```
-
-</td>
-
-<td>
-
-```
-pika “Hello world”
-```
-
-</td>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th><tr>
+    </tr>
+    <tr>
+        <td>
+        ```javascript
+        console.log(“Hello world”)
+        ```
+        </td>
+        <td>
+        ```
+        pika “Hello world”
+        ```
+        </td>
+    </tr>
 </table>
 
 <table>
