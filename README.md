@@ -43,14 +43,20 @@ Created by George Harrison
 | `var x = 1`   | `poke x = 1`  |
 | `const x = 1` | `const x = 1` |
 
-| Javascript | PokeScript |
-| ---------- | ---------- |
+<table>
+<tr> <th>JavaScript</th><th>PokeScript</th><tr>
+</tr>
+<td>
 
-| `
+```
 function add(a, b){
     return a + b;
-}`
-|
+}
+```
+
+</td>
+
+<td>
 
 ```
 ability add(pokedollar a, pokedollar b) {
@@ -58,7 +64,8 @@ ability add(pokedollar a, pokedollar b) {
 }
 ```
 
-|
+</td>
+</table>
 
 | Javascript | PokeScript |
 | ---------- | ---------- |
