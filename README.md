@@ -63,7 +63,7 @@ Created by George Harrison
 <table>
     <tr>
         <th>Javascript</th>
-        <th>PokeScript</th><tr>
+        <th>PokeScript</th>
     </tr>
     <tr>
         <td>
@@ -76,208 +76,233 @@ Created by George Harrison
 </table>
 
 <table>
-<tr> <th>Javascript</th><th>PokeScript</th><tr>
-</tr>
-<td>
-
-```javascript
-var x = 1
-const x = 1
-```
-
-</td>
-
-<td>
-
-```
-poke x = 1
-const x = 5
-```
-
-</td>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+                <code>
+                    var x = 1
+                    const x = 1
+                </code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+                <code>
+                    poke x = 1
+                    const x = 5
+                </code>
+            </pre>
+        </td>
+    </tr>
 </table>
 
 <table>
-<tr> <th>Javascript</th><th>PokeScript</th><tr>
-</tr>
-<td>
-
-```javascript
-function add(a, b) {
-  return a + b
-}
-```
-
-</td>
-
-<td>
-
-```
-ability add(pokedollar a, pokedollar b) {
-    return a + b
-}
-```
-
-</td>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+                <code>
+                    function add(a, b) {
+                        return a + b
+                    }
+                </code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+                <code>
+                    ability add(pokedollar a, pokedollar b) {
+                        return a + b
+                    }
+                </code>
+            </pre>
+        </td>
+    </tr>
 </table>
 
 <table>
-<tr> <th>Javascript</th><th>PokeScript</th><tr>
-</tr>
-<td>
-
-```javascript
-if (x == 5) {
-  return 5
-} else if (x == 4) {
-  return 4
-} else {
-  return 2
-}
-```
-
-</td>
-
-<td>
-
-```javascript
-catch x == 5 {
-    pika 5
-} release catch x == 4 {
-    pika 4
-} release {
-    pika 2
-}
-```
-
-</td>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+                <code>
+                    if (x == 5) {
+                        return 5
+                    } else if (x == 4) {
+                        return 4
+                    } else {
+                        return 2
+                    }
+                </code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+                <code>
+                    catch x == 5 {
+                        pika 5
+                    } release catch x == 4 {
+                        pika 4
+                    } release {
+                        pika 2
+                    }
+                </code>
+            </pre>
+        </td>
+    </tr>
 </table>
 
 <table>
-<tr> <th>Javascript</th><th>PokeScript</th><tr>
-</tr>
-<td>
-
-```javascript
-for (int x = 3, x < 5; x++) {
-    break;
-}
-```
-
-</td>
-
-<td>
-
-```
-evolve pokedollar x = 3 until 5 {
-    break
-}
-```
-
-</td>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+                <code>
+                    for (int x = 3, x < 5; x++) {
+                        break;
+                    }
+                </code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+                <code>
+                    evolve pokedollar x = 3 until 5 {
+                        break
+                    }
+                </code>
+            </pre>
+        </td>
+    </tr>
 </table>
 
 <table>
-<tr> <th>Javascript</th><th>PokeScript</th><tr>
-</tr>
-<td>
-
-```javascript
-while (true) {
-  var x = 1
-}
-```
-
-</td>
-
-<td>
-
-```
-while success {
-    poke x = 1
-}
-```
-
-</td>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+                <code>
+                    while (true) {
+                        var x = 1
+                    }
+                </code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+                <code>
+                    while success {
+                        poke x = 1
+                    }
+                </code>
+            </pre>
+        </td>
+    </tr>
 </table>
 
 <table>
-<tr> <th>Python</th><th>PokeScript</th><tr>
-</tr>
-<td>
-
-```python
-dex = {
-  "pikachu": 3,
-  "charizard": 6,
-  "snorlax": 8
-}
-```
-
-</td>
-
-<td>
-
-```
-{pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}
-```
-
-</td>
+    <tr>
+        <th>Python</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+                <code>
+                    dex = {
+                      "pikachu": 3,
+                      "charizard": 6,
+                      "snorlax": 8
+                    }
+                </code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+                <code>
+                    {pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}
+                </code>
+            </pre>
+        </td>
+    </tr>
 </table>
 
 <table>
-<tr> <th>Javascript</th><th>PokeScript</th><tr>
-</tr>
-<td>
-
-```javascript
-class Pokemon {
-  constructor(level, name) {
-    this.level = level
-    this.name = name
-  }
-  getLevel() {
-    return this.level
-  }
-}
-```
-
-</td>
-
-<td>
-
-```
-
-train Pokemon {
-    starter(pokedollar level, pokestring name) {
-        this.level = level
-        this.name = name
-    }
-    getLevel() {
-        return this.level
-    }
-}
-
-```
-
-</td>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+                <code>
+                    class Pokemon {
+                      constructor(level, name) {
+                        this.level = level
+                        this.name = name
+                      }
+                      getLevel() {
+                        return this.level
+                      }
+                    }
+                </code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+                <code>
+                    train Pokemon {
+                        starter(pokedollar level, pokestring name) {
+                            this.level = level
+                            this.name = name
+                        }
+                        getLevel() {
+                            return this.level
+                        }
+                    }
+                </code>
+            </pre>
+        </td>
+    </tr>
 </table>
 
 <table>
-<tr> <th>Javascript</th><th>PokeScript</th><tr>
-</tr>
-<td> 
-    
-```javascript
-// comment
-```
-</td>
-<td>
-    
-```
-ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment
-```
-</td>
+    <tr>
+        <th>Javascript</th>
+        <th>PokeScript</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+                <code>
+                    // comment
+                </code>
+            </pre>
+        </td>
+        <td>
+            <pre>
+                <code>
+                    ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment
+                </code>
+            </pre>
+        </td>
+    </tr>
 </table>
 
 ## Types of Semantic Errors
