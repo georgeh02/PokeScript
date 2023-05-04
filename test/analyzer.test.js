@@ -122,7 +122,7 @@ const semanticErrors = [
     /Identifier f already declared at/,
   ],
   [
-    "map with incorrect types",
+    "map with mixed types",
     "{capture, pokedollar} x =  {fail: 3, 5: 2}",
     /Mixed types in map at/,
   ],
