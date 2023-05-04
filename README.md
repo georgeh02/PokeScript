@@ -128,7 +128,7 @@ evolve pokedollar x = 3 until 5 {
 </tr>
 <td>
 
-````
+```
 dex = {
   "pikachu": 3,
   "charizard": 6,
@@ -140,10 +140,8 @@ dex = {
 
 <td>
 
-````
-
+```
 {pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}
-
 ```
 
 </td>
@@ -206,4 +204,7 @@ return this.level
     - Function with return value doesn't return anything
     - Calling a function or method that is not intialized
     - For loop with non-integer iterator
+
+```
+
 ```
