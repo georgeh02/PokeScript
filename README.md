@@ -129,8 +129,7 @@ if (x == 5) {
     return 4
 } else {
     return 2
-}
-            </code></pre>
+}</code></pre>
         </td>
         <td>
             <pre><code>
@@ -140,8 +139,7 @@ catch x == 5 {
     pika 4
 } release {
     pika 2
-}
-            </code></pre>
+}</code></pre>
         </td>
     </tr>
 </table>
@@ -156,15 +154,13 @@ catch x == 5 {
             <pre><code>
 for (int x = 3, x < 5; x++) {
     break;
-}
-            </code></pre>
+}</code></pre>
         </td>
         <td>
             <pre><code>
 evolve pokedollar x = 3 until 5 {
     break
-}
-            </code></pre>
+}</code></pre>
         </td>
     </tr>
 </table>
@@ -179,15 +175,13 @@ evolve pokedollar x = 3 until 5 {
             <pre><code>
 while (true) {
     var x = 1
-}
-            </code></pre>
+}</code></pre>
         </td>
         <td>
             <pre><code>
 while success {
     poke x = 1
-}
-            </code></pre>
+}</code></pre>
         </td>
     </tr>
 </table>
@@ -204,13 +198,10 @@ dex = {
     "pikachu": 3,
     "charizard": 6,
     "snorlax": 8
-}
-            </code></pre>
+}</code></pre>
         </td>
         <td>
-            <pre><code>
-{pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}
-            </code></pre>
+            <pre><code>{pokestring, pokedollar} dex = {"pikachu": 3, "charizard": 6, "snorlax": 8}</code></pre>
         </td>
     </tr>
 </table>
@@ -231,8 +222,7 @@ class Pokemon {
     getLevel() {
         return this.level
     }
-}
-            </code></pre>
+}</code></pre>
         </td>
         <td>
             <pre><code>
@@ -244,8 +234,7 @@ train Pokemon {
     getLevel() {
         return this.level
     }
-}
-            </code></pre>
+}</code></pre>
         </td>
     </tr>
 </table>
@@ -257,14 +246,10 @@ train Pokemon {
     </tr>
     <tr>
         <td>
-            <pre><code>
-// comment
-            </code></pre>
+            <pre><code>// comment</code></pre>
         </td>
         <td>
-            <pre><code>
-ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment
-            </code></pre>
+            <pre><code>ϞϞ(๑⚈ ․̫ ⚈๑)∩ comment</code></pre>
         </td>
     </tr>
 </table>
