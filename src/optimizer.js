@@ -25,7 +25,8 @@ import * as core from "./core.js"
 
 export default function optimize(node) {
   // return optimizers[node.constructor.name](node)
-  throw new Error("Not yet implemented")
+  return node
+  // throw new Error("Not yet implemented")
 }
 
 const optimizers = {

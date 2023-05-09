@@ -86,7 +86,7 @@ export default function analyze(match) {
   }
 
   function mustNotAlreadyBeDeclared(name, at) {
-    //console.log(context)
+    // console.log(context)
     must(
       context.lookup(name) === undefined,
       `Identifier ${name} already declared at`,
@@ -362,7 +362,7 @@ export default function analyze(match) {
       return new core.ConstructorDeclaration(starter)
     },
     Field(type, _this, _dot, id, _eq, exp) {
-      console.log(type.rep())
+      // console.log(type.rep())
       entityMustBeAType(type.rep(), { at: type })
       context.add(id.sourceString, exp)
       return new core.Field(type.rep(), id.sourceString, exp.rep())
@@ -532,10 +532,10 @@ export default function analyze(match) {
     },
     Member(exp5, _dot, id) {
       const object = exp5.rep()
-      console.log(context.lookup(object.name))
-      console.log(context)
+      // console.log(context.lookup(object.name))
+      // console.log(context)
       //find class called exp5.rep()
-      console.log(object)
+      // console.log(object)
       memberMustBeDeclared(object.type, id.sourceString, { at: id })
       const field = object.type.fields.find((f) => f.name === id.sourceString)
       return new core.MemberExpression(object, field)
@@ -543,9 +543,9 @@ export default function analyze(match) {
     ObjectDec(_new, id, _open, exps, _close) {
       //mustbedeclared
       const params = exps.asIteration().children.map((e) => e.rep())
-      console.log(new core.ClassType(id.sourceString))
+      // console.log(new core.ClassType(id.sourceString))
       //const object = new core.Class
-      console.log(params)
+      // console.log(params)
       return new core.ObjectDec(id.sourceString, params)
     },
     Call(id, open, expList, _close) {

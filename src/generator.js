@@ -1,7 +1,7 @@
 import { IfStatement, Type, standardLibrary } from "./core.js"
 
 export default function generate(program) {
-  throw new Error("Not yet implemented")
+  //throw new Error("Not yet implemented")
   const output = []
 
   const standardFunctions = new Map([
@@ -29,6 +29,7 @@ export default function generate(program) {
   })(new Map())
 
   function gen(node) {
+    console.log(node.constructor.name)
     return generators[node.constructor.name](node)
   }
 
@@ -37,6 +38,9 @@ export default function generate(program) {
     // generating a statement, write lines of translated JS to the output array.
     Program(p) {
       gen(p.statements)
+    },
+    PrintStatement(s) {
+      output.push(`console.log(${gen(s.argument)})`)
     },
     VariableDeclaration(d) {
       // We don't care about const vs. let in the generated code! The analyzer has
